@@ -1,0 +1,7 @@
+# Docs internas — não precisam ir ao GitHub Pages
+BRIEFING_PAINEL_ECGNOW.md
+padrao_ecgnow/
+
+# OS
+.DS_Store
+Thumbs.db
