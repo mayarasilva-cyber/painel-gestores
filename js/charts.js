@@ -47,11 +47,22 @@ function sparkHTML(bars) {
 
 // ── YoY grouped bars: 2025 (navy) vs 2026 (cyan) ──
 function yoyBarsHTML(vals25, vals26, fmtFn) {
-  const all = [...vals25, ...vals26].filter(v => v > 0);
+  const n = Math.max(vals26.length, 1);
+  const start  = Math.max(0, n - 6);
+  const sl25   = vals25.slice(start, start + 6);
+  const sl26   = vals26.slice(start, start + 6);
+  const months = MONTHS_SHORT.slice(start, start + sl26.length);
+
+  const all = [...sl25, ...sl26].filter(v => v > 0);
   if (!all.length) return '<p class="no-data">Sem dados comparativos</p>';
-  const mx = Math.max(...all, 1);
+  const mx  = Math.max(...all, 1);
   const fmt = fmtFn || (v => fmtNum(v));
-  const months = MONTHS_SHORT.slice(0, Math.max(vals25.length, vals26.length));
+
+  const lbl = v => {
+    if (!v) return '';
+    if (fmtFn) return fmtFn(v);
+    return v >= 1000 ? (Math.round(v / 100) / 10) + 'k' : String(v);
+  };
 
   return `
     <div class="yoy-legend">
@@ -60,15 +71,26 @@ function yoyBarsHTML(vals25, vals26, fmtFn) {
     </div>
     <div class="yoy-bars">
       ${months.map((mo, i) => {
-        const v25 = vals25[i] || 0, v26 = vals26[i] || 0;
-        const h25 = Math.max(v25>0 ? (v25/mx)*100 : 0, v25>0 ? 4 : 0);
-        const h26 = Math.max(v26>0 ? (v26/mx)*100 : 0, v26>0 ? 4 : 0);
+        const v5 = sl25[i] || 0, v6 = sl26[i] || 0;
+        const h5 = v5 > 0 ? Math.max((v5 / mx) * 100, 4) : 0;
+        const h6 = v6 > 0 ? Math.max((v6 / mx) * 100, 4) : 0;
+        const delta  = (v5 > 0 && v6 > 0) ? ((v6 - v5) / v5 * 100) : null;
+        const dHtml  = delta !== null
+          ? `<div class="yoy-delta ${delta >= 0 ? 'yoy-up' : 'yoy-dn'}">${delta >= 0 ? '▲' : '▼'}${Math.abs(delta).toFixed(0)}%</div>`
+          : '';
         return `<div class="yoy-group">
           <div class="yoy-pair">
-            <div class="yoy-bar" style="height:${h25}%;background:var(--navy)" title="2025 ${mo}: ${fmt(v25)}"></div>
-            <div class="yoy-bar" style="height:${h26}%;background:var(--cyan)" title="2026 ${mo}: ${fmt(v26)}"></div>
+            <div class="yoy-bwrap" style="height:${h5}%" title="2025 ${mo}: ${fmt(v5)}">
+              <span class="yoy-val">${lbl(v5)}</span>
+              <div class="yoy-bar" style="background:var(--navy)"></div>
+            </div>
+            <div class="yoy-bwrap" style="height:${h6}%" title="2026 ${mo}: ${fmt(v6)}">
+              <span class="yoy-val yoy-val-cur">${lbl(v6)}</span>
+              <div class="yoy-bar" style="background:var(--cyan)"></div>
+            </div>
           </div>
           <div class="yoy-lbl">${mo}</div>
+          ${dHtml}
         </div>`;
       }).join('')}
     </div>`;

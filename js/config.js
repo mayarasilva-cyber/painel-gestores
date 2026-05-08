@@ -49,5 +49,5 @@ const CATS_SAAS_DESCONTO= ['3.1 Licença de uso'];
 // Para trocar a senha: no console do navegador, execute:
 //   sha256hash('SUA_NOVA_SENHA').then(h => console.log(h))
 // Cole o resultado abaixo.
-// Hash atual corresponde à senha: ecgnow2026
-const AUTH_HASH = '2f0921176b76b193c22319da1856df0d3bd5f42e6ccd51fecd59ed2be08a6d18';
+// Hash atual corresponde à senha: Ecgn0w2029*
+const AUTH_HASH = 'ca4f56454b5302f5c2c12e0158db4e52db7a17bf2b7183fe528fb5dd6ce6b858';
