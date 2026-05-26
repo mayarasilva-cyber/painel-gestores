@@ -4,6 +4,38 @@
 
 let cache = {};
 
+// ── Cache localStorage (TTL 5 min) ──
+const LS_PREFIX  = 'ecgnow-v1-';
+const CACHE_TTL  = 5 * 60 * 1000;
+
+function lsGet(key) {
+  try {
+    const raw = localStorage.getItem(LS_PREFIX + key);
+    if (!raw) return null;
+    const { ts, rows } = JSON.parse(raw);
+    if (Date.now() - ts > CACHE_TTL) return null;   // expirado
+    return { data: rows };
+  } catch { return null; }
+}
+
+function lsSet(key, res) {
+  try {
+    localStorage.setItem(LS_PREFIX + key, JSON.stringify({ ts: Date.now(), rows: res.data }));
+  } catch {
+    // quota excedida: limpa tudo e tenta de novo
+    try { Object.keys(CSV_GIDS).forEach(k => localStorage.removeItem(LS_PREFIX + k)); } catch {}
+  }
+}
+
+function lsClear() {
+  try { Object.keys(CSV_GIDS).forEach(k => localStorage.removeItem(LS_PREFIX + k)); } catch {}
+}
+
+// Retorna true se ao menos uma chave primária ainda está válida no localStorage
+function lsHasData() {
+  return ['HOLTER','MAPA','ECG','INFO_2026'].some(k => lsGet(k) !== null);
+}
+
 function csvParse(line) {
   const r = []; let c = '', q = false;
   for (let i = 0; i < line.length; i++) {
@@ -23,7 +55,14 @@ function csvParse(line) {
 }
 
 async function fetchData(key) {
+  // 1) cache em memória (mais rápido)
   if (cache[key]) return cache[key];
+
+  // 2) cache em localStorage (persiste entre reloads)
+  const lsCached = lsGet(key);
+  if (lsCached) { cache[key] = lsCached; return lsCached; }
+
+  // 3) busca no Google Sheets
   const gid = CSV_GIDS[key];
   if (!gid && gid !== '0') throw new Error('GID não encontrado: ' + key);
   const r = await fetch(CSV_BASE + gid);
@@ -38,10 +77,13 @@ async function fetchData(key) {
     const cols = csvParse(lines[i]);
     if (cols.length >= 2) rows.push(cols);
   }
-  const res = { data: rows }; cache[key] = res; return res;
+  const res = { data: rows };
+  cache[key] = res;
+  lsSet(key, res);   // salva no localStorage para próxima abertura
+  return res;
 }
 
-function clearCache() { cache = {}; }
+function clearCache() { cache = {}; lsClear(); }
 
 async function getHolterMerged() {
   const { data: h } = await fetchData('HOLTER');

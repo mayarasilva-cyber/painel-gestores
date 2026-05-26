@@ -35,8 +35,11 @@ function initApp() {
 }
 
 async function preloadAll() {
-  showLoading();
   const keys = ['HOLTER','HOLTER_IEM','REPETICAO','MAPA','ECG','FINANCEIRO','NCTS','INFO_2025','INFO_2026'];
+
+  // Só exibe spinner se não tiver dados em cache — se tiver, abre instantâneo
+  if (!lsHasData()) showLoading();
+
   const results = await Promise.allSettled(keys.map(k => fetchData(k)));
   results.forEach((r, i) => { if (r.status === 'rejected') console.warn(keys[i]+' falhou:', r.reason); });
   loadTab(currentTab);
