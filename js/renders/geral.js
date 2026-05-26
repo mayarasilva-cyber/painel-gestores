@@ -56,10 +56,10 @@ async function renderGeral() {
   });
   const fat25    = info25Row ? parseNum(info25Row[ci.fat])     : 0;
   const margem25 = info25Row ? parsePct(info25Row[ci.margem])  : 0;
-  const ecg25    = info25Row ? parseInt(info25Row[ci.ecg])||0  : 0;
-  const hol25    = info25Row ? parseInt(info25Row[ci.holter])||0: 0;
-  const map25    = info25Row ? parseInt(info25Row[ci.mapa])||0 : 0;
-  const te25     = info25Row ? parseInt(info25Row[ci.te])||0   : 0;
+  const ecg25    = info25Row ? parseIntBR(info25Row[ci.ecg])   : 0;
+  const hol25    = info25Row ? parseIntBR(info25Row[ci.holter]): 0;
+  const map25    = info25Row ? parseIntBR(info25Row[ci.mapa])  : 0;
+  const te25     = info25Row ? parseIntBR(info25Row[ci.te])    : 0;
   const tot25    = ecg25+hol25+map25+te25;
 
   // YoY: todos os meses disponíveis
@@ -69,7 +69,7 @@ async function renderGeral() {
 
   const fat25arr  = filled25.map(r => parseNum(r[ci.fat]));
   const fat26arr  = filled26.map(r => parseNum(r[ci.fat]));
-  const tot25arr  = filled25.map(r => (parseInt(r[ci.ecg])||0)+(parseInt(r[ci.holter])||0)+(parseInt(r[ci.mapa])||0)+(parseInt(r[ci.te])||0));
+  const tot25arr  = filled25.map(r => parseIntBR(r[ci.ecg])+parseIntBR(r[ci.holter])+parseIntBR(r[ci.mapa])+parseIntBR(r[ci.te]));
 
   // YoY exames 2026 — puxar dos dados reais (agrupados por mês)
   const tot26arr = MONTHS_SHORT.slice(0, filled26.length).map((_, idx) => {

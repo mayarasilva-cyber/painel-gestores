@@ -17,10 +17,10 @@ async function renderProducao() {
   const nMeses   = filled25.length;
 
   // Arrays mensais 2025 (das abas INFO)
-  const ecg25arr = filled25.map(r => parseInt(r[ci.ecg])  ||0);
-  const hol25arr = filled25.map(r => parseInt(r[ci.holter])||0);
-  const map25arr = filled25.map(r => parseInt(r[ci.mapa]) ||0);
-  const te25arr  = filled25.map(r => parseInt(r[ci.te])   ||0);
+  const ecg25arr = filled25.map(r => parseIntBR(r[ci.ecg]));
+  const hol25arr = filled25.map(r => parseIntBR(r[ci.holter]));
+  const map25arr = filled25.map(r => parseIntBR(r[ci.mapa]));
+  const te25arr  = filled25.map(r => parseIntBR(r[ci.te]));
 
   // Arrays mensais 2026 — dos dados reais
   const ch = COLS.HOLTER, cm = COLS.MAPA, ce = COLS.ECG;
@@ -35,7 +35,7 @@ async function renderProducao() {
   const map26arr = countByMonth(mR.data, cm.date, 2026, filled26.length || 4);
   const ecg26arr = countByMonth(eR.data, ce.date, 2026, filled26.length || 4);
   // TE: sem aba live ainda — usar INFO_2026 quando preenchido
-  const te26arr  = filled26.map(r => parseInt(r[ci.te])||0);
+  const te26arr  = filled26.map(r => parseIntBR(r[ci.te]));
 
   // Período atual
   const hRows = filterPeriod(hR.data, ch.date);
@@ -47,10 +47,10 @@ async function renderProducao() {
 
   // INFO do mês selecionado 2025
   const info25 = i25R.data.find(r => matchInfoMonth(r, selMonth));
-  const hol25m = info25 ? parseInt(info25[ci.holter])||0 : 0;
-  const map25m = info25 ? parseInt(info25[ci.mapa])||0   : 0;
-  const ecg25m = info25 ? parseInt(info25[ci.ecg])||0    : 0;
-  const te25m  = info25 ? parseInt(info25[ci.te])||0     : 0;
+  const hol25m = info25 ? parseIntBR(info25[ci.holter]) : 0;
+  const map25m = info25 ? parseIntBR(info25[ci.mapa])   : 0;
+  const ecg25m = info25 ? parseIntBR(info25[ci.ecg])    : 0;
+  const te25m  = info25 ? parseIntBR(info25[ci.te])     : 0;
 
   const tot26    = hRows.length + mRows.length + eRows.length;
   const tot26P   = hPrev.length + mPrev.length + ePrev.length;

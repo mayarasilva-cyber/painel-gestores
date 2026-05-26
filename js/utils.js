@@ -20,9 +20,21 @@ function parseDate(s) {
 function parseNum(s) {
   if (s === '' || s == null || s === '-') return 0;
   if (typeof s === 'number') return s;
-  s = String(s);
-  if (/^-?\d+(\.\d+)?$/.test(s)) return parseFloat(s);
-  return parseFloat(s.replace(/[R$\s]/g,'').replace(/\./g,'').replace(',','.')) || 0;
+  s = String(s).trim();
+  // Formato BR: "1.234,56" ou "1.234" (inteiro com separador de milhar)
+  // Formato EN: "1234.56"
+  // Se tem vírgula → definitivamente BR (vírgula é decimal)
+  if (s.includes(',')) return parseFloat(s.replace(/[R$\s]/g,'').replace(/\./g,'').replace(',','.')) || 0;
+  // Sem vírgula: se tem ponto seguido de exatamente 3 dígitos ao final → separador de milhar BR
+  if (/\.\d{3}$/.test(s)) return parseFloat(s.replace(/[R$\s]/g,'').replace(/\./g,'')) || 0;
+  // Caso contrário: número EN ou inteiro puro
+  return parseFloat(s.replace(/[R$\s]/g,'')) || 0;
+}
+
+// Para contagens de exames nas abas INFO (formato "20.335" = 20.335 exames)
+function parseIntBR(s) {
+  if (!s || s === '-') return 0;
+  return parseInt(String(s).trim().replace(/\./g, ''), 10) || 0;
 }
 
 function parsePct(s) {
