@@ -38,9 +38,25 @@ async function renderRepeticao() {
   const topMot  = Object.entries(motMap).sort((a,b) => b[1]-a[1]);
   const mxM     = topMot[0]?.[1] || 1;
 
-  // Top centrais com repetição
+  // Top centrais com repetição (por volume)
   const topCR = topN(repRows, c.central, 8);
   const mxC   = topCR[0]?.[1] || 1;
+
+  // Top centrais com maior % de repetição (mín. 10 exames para ser relevante)
+  const centralMap = {};
+  all.forEach(r => {
+    const nome = (r[c.central]||'').trim();
+    if (!nome) return;
+    if (!centralMap[nome]) centralMap[nome] = { tot: 0, rep: 0 };
+    centralMap[nome].tot++;
+    if ((r[c.modalidade]||'').trim() === 'Repetição') centralMap[nome].rep++;
+  });
+  const topCRpct = Object.entries(centralMap)
+    .filter(([, v]) => v.tot >= 10)
+    .map(([nome, v]) => ({ nome, rep: v.rep, tot: v.tot, pct: v.rep / v.tot * 100 }))
+    .sort((a, b) => b.pct - a.pct)
+    .slice(0, 8);
+  const mxCPct = topCRpct[0]?.pct || 1;
 
   // Trend YoY de repetição
   const trend2026 = getMonthlyTrend(data, c.date, rows => {
@@ -128,6 +144,23 @@ async function renderRepeticao() {
           </tr>`).join('')}</tbody>
         </table>`}
       </div>
+    </div>
+
+    <!-- Centrais com maior % de repetição -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-title">📊 Centrais com Maior % de Repetição <span style="font-size:11px;font-weight:400;color:var(--text-soft)">(mín. 10 exames no período)</span></div>
+      ${!topCRpct.length ? '<p class="no-data">Sem dados suficientes.</p>' : `
+      <table>
+        <thead><tr><th>#</th><th>Central</th><th style="width:100px"></th><th style="text-align:right">Taxa</th><th style="text-align:right;padding-left:6px">Rep.</th><th style="text-align:right;padding-left:6px">Total</th></tr></thead>
+        <tbody>${topCRpct.map((d, i) => `<tr>
+          <td class="td-rank">${i+1}</td>
+          <td class="td-name" title="${esc(d.nome)}">${esc(d.nome)}</td>
+          <td class="td-bar"><div class="bar-bg"><div class="bar-fill" style="width:${(d.pct/mxCPct*100).toFixed(0)}%;background:linear-gradient(90deg,var(--red),#f87171)"></div></div></td>
+          <td class="td-count" style="color:var(--red);font-weight:700">${d.pct.toFixed(1)}%</td>
+          <td class="td-count">${fmtNum(d.rep)}</td>
+          <td class="td-count" style="color:var(--text-soft)">${fmtNum(d.tot)}</td>
+        </tr>`).join('')}</tbody>
+      </table>`}
     </div>
 
     <!-- Tendência mensal 2026 -->
