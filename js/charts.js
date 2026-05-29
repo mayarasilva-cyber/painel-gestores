@@ -45,8 +45,11 @@ function sparkHTML(bars) {
   }).join('')}</div>`;
 }
 
-// ── YoY grouped bars: 2025 (navy) vs 2026 (cyan) ──
-function yoyBarsHTML(vals25, vals26, fmtFn) {
+// ── YoY grouped bars: 2025 vs 2026 — cores customizáveis ──
+function yoyBarsHTML(vals25, vals26, fmtFn, color25, color26) {
+  const c25 = color25 || 'var(--navy)';
+  const c26 = color26 || 'var(--cyan)';
+
   const n = Math.max(vals26.length, 1);
   const start  = Math.max(0, n - 6);
   const sl25   = vals25.slice(start, start + 6);
@@ -66,8 +69,8 @@ function yoyBarsHTML(vals25, vals26, fmtFn) {
 
   return `
     <div class="yoy-legend">
-      <span class="yoy-dot" style="background:var(--navy)"></span><span>2025</span>
-      <span class="yoy-dot" style="background:var(--cyan)"></span><span>2026</span>
+      <span class="yoy-dot" style="background:${c25}"></span><span>2025</span>
+      <span class="yoy-dot" style="background:${c26}"></span><span>2026</span>
     </div>
     <div class="yoy-bars">
       ${months.map((mo, i) => {
@@ -82,11 +85,11 @@ function yoyBarsHTML(vals25, vals26, fmtFn) {
           <div class="yoy-pair">
             <div class="yoy-bwrap" style="height:${h5}%" title="2025 ${mo}: ${fmt(v5)}">
               <span class="yoy-val">${lbl(v5)}</span>
-              <div class="yoy-bar" style="background:var(--navy)"></div>
+              <div class="yoy-bar" style="background:${c25}"></div>
             </div>
             <div class="yoy-bwrap" style="height:${h6}%" title="2026 ${mo}: ${fmt(v6)}">
-              <span class="yoy-val yoy-val-cur">${lbl(v6)}</span>
-              <div class="yoy-bar" style="background:var(--cyan)"></div>
+              <span class="yoy-val" style="color:${c26}">${lbl(v6)}</span>
+              <div class="yoy-bar" style="background:${c26}"></div>
             </div>
           </div>
           <div class="yoy-lbl">${mo}</div>

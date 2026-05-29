@@ -111,25 +111,22 @@ async function renderProducao() {
     </div>
     <div class="two-col">
       <div class="yoy-wrap">
-        <div class="yoy-title">Total Exames — 2025 vs 2026</div>
-        <div class="yoy-chart">${yoyBarsHTML(tot25arr, tot26arr)}</div>
+        <div class="yoy-title">📊 Total Exames — 2025 vs 2026</div>
+        <div class="yoy-chart">${yoyBarsHTML(tot25arr, tot26arr, null, '#1e3a5f', '#0ea5e9')}</div>
       </div>
-      <div class="two-col" style="display:flex;flex-direction:column;gap:12px;margin-bottom:0">
-        <div class="yoy-wrap" style="flex:1">
-          <div class="yoy-title">Holter</div>
-          <div class="yoy-chart">${yoyBarsHTML(hol25arr, hol26arr)}</div>
-        </div>
-        <div class="yoy-wrap" style="flex:1">
-          <div class="yoy-title">Mapa</div>
-          <div class="yoy-chart">${yoyBarsHTML(map25arr, map26arr)}</div>
-        </div>
+      <div class="yoy-wrap">
+        <div class="yoy-title">💚 Holter</div>
+        <div class="yoy-chart">${yoyBarsHTML(hol25arr, hol26arr, null, '#064e3b', '#10b981')}</div>
       </div>
     </div>
-
     <div class="two-col">
       <div class="yoy-wrap">
-        <div class="yoy-title">ECG</div>
-        <div class="yoy-chart">${yoyBarsHTML(ecg25arr, ecg26arr)}</div>
+        <div class="yoy-title">🔴 Mapa</div>
+        <div class="yoy-chart">${yoyBarsHTML(map25arr, map26arr, null, '#7f1d1d', '#ef4444')}</div>
+      </div>
+      <div class="yoy-wrap">
+        <div class="yoy-title">🩶 ECG</div>
+        <div class="yoy-chart">${yoyBarsHTML(ecg25arr, ecg26arr, null, '#374151', '#9ca3af')}</div>
       </div>
     </div>
 
