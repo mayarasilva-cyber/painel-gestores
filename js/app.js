@@ -35,14 +35,23 @@ function initApp() {
 }
 
 async function preloadAll() {
-  const keys = ['HOLTER','HOLTER_IEM','REPETICAO','MAPA','ECG','FINANCEIRO','NCTS','INFO_2025','INFO_2026'];
+  // Grupo 1: dados principais (exames + financeiro base)
+  const mainKeys = ['HOLTER','HOLTER_IEM','MAPA','ECG','INFO_2025','INFO_2026'];
+  // Grupo 2: dados complementares — carregados após grupo 1 para evitar rate limit
+  const extraKeys = ['REPETICAO','FINANCEIRO','NCTS','FATURAMENTO'];
 
-  // Só exibe spinner se não tiver dados em cache — se tiver, abre instantâneo
   if (!lsHasData()) showLoading();
 
-  const results = await Promise.allSettled(keys.map(k => fetchData(k)));
-  results.forEach((r, i) => { if (r.status === 'rejected') console.warn(keys[i]+' falhou:', r.reason); });
+  // Carrega grupo principal primeiro
+  const r1 = await Promise.allSettled(mainKeys.map(k => fetchData(k)));
+  r1.forEach((r, i) => { if (r.status === 'rejected') console.warn(mainKeys[i]+' falhou:', r.reason); });
+
+  // Renderiza a tab atual assim que os dados principais chegarem
   loadTab(currentTab);
+
+  // Carrega dados complementares em background
+  const r2 = await Promise.allSettled(extraKeys.map(k => fetchData(k)));
+  r2.forEach((r, i) => { if (r.status === 'rejected') console.warn(extraKeys[i]+' falhou:', r.reason); });
 }
 
 function refreshAll() { clearCache(); preloadAll(); }

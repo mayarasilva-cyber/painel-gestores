@@ -69,8 +69,9 @@ async function fetchData(key) {
   if (!r.ok) throw new Error(`HTTP ${r.status} – ${key}`);
   const t = await r.text();
   if (t.trim().startsWith('<!') || t.trim().startsWith('<html')) {
-    console.warn(`${key}: resposta HTML (aba não publicada?)`);
-    const res = { data: [] }; cache[key] = res; return res;
+    // Rate limit ou aba não publicada: NÃO cacheia para permitir retry
+    console.warn(`${key}: resposta HTML – possível rate limit, não cacheado`);
+    return { data: [] };
   }
   const lines = t.split('\n').filter(l => l.trim()), rows = [];
   for (let i = 1; i < lines.length; i++) {
