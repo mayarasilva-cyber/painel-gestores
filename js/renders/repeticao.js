@@ -20,8 +20,15 @@ async function renderRepeticao() {
   const pPct = pTot > 0 ? (pRep/pTot*100) : 0;
 
   // SAAS vs TD
-  const saasAll  = all.filter(r => (r[c.saaslaudo]||'').trim() === 'SAAS');
-  const tdAll    = all.filter(r => (r[c.saaslaudo]||'').trim() === 'Laudos');
+  // Classifica pelo campo saaslaudo; se vazio, usa prefixo [Saas] no nome da central
+  const isSaasRow = r => {
+    const sl = (r[c.saaslaudo]||'').trim();
+    if (sl === 'SAAS')   return true;
+    if (sl === 'Laudos') return false;
+    return (r[c.central]||'').trim().toLowerCase().startsWith('[saas]');
+  };
+  const saasAll  = all.filter(r => isSaasRow(r));
+  const tdAll    = all.filter(r => !isSaasRow(r));
   const saasRep  = saasAll.filter(r => (r[c.modalidade]||'').trim() === 'Repetição').length;
   const saasFin  = saasAll.filter(r => (r[c.modalidade]||'').trim() === 'Finalizado').length;
   const saasT    = saasRep + saasFin;
