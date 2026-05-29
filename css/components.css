@@ -140,7 +140,7 @@
 
 .yoy-bars {
   display: flex; align-items: flex-end; gap: 6px;
-  height: 162px; padding-bottom: 44px; padding-top: 20px; position: relative;
+  height: 178px; padding-bottom: 44px; padding-top: 32px; position: relative;
 }
 
 .yoy-group {
