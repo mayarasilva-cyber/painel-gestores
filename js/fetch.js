@@ -5,7 +5,7 @@
 let cache = {};
 
 // ── Cache localStorage (TTL 5 min) ──
-const LS_PREFIX  = 'ecgnow-v1-';
+const LS_PREFIX  = 'ecgnow-v3-';
 const CACHE_TTL  = 5 * 60 * 1000;
 
 function lsGet(key) {
