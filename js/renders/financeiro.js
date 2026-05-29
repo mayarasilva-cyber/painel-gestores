@@ -3,15 +3,17 @@
 // ═══════════════════════════════════════════════
 
 async function renderFinanceiro() {
-  const [fR, hR, mR, eR, i25R, i26R, fatR] = await Promise.all([
+  const [fR, hR, mR, eR, i25R, i26R] = await Promise.all([
     fetchData('FINANCEIRO'),
     getHolterMerged(),
     fetchData('MAPA'),
     fetchData('ECG'),
     fetchData('INFO_2025'),
     fetchData('INFO_2026'),
-    fetchData('FATURAMENTO'),
   ]);
+
+  // FATURAMENTO buscado separadamente para não sobrecarregar o rate limit do Sheets
+  const fatR = await fetchData('FATURAMENTO').catch(() => ({ data: [] }));
 
   const cf = COLS.FINANCEIRO, ci = COLS.INFO;
   const now = new Date();
