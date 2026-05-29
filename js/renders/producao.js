@@ -131,11 +131,6 @@ async function renderProducao() {
         <div class="yoy-title">ECG</div>
         <div class="yoy-chart">${yoyBarsHTML(ecg25arr, ecg26arr)}</div>
       </div>
-      ${te25arr.some(v=>v>0) ? `
-      <div class="yoy-wrap">
-        <div class="yoy-title">TE (Teste de Esforço)</div>
-        <div class="yoy-chart">${yoyBarsHTML(te25arr, te26arr)}</div>
-      </div>` : ''}
     </div>
 
     <!-- Centrais Top por modalidade -->
