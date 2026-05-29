@@ -100,9 +100,9 @@ async function renderProducao() {
 
     <!-- Cards de detalhe por modalidade -->
     <div class="mod-grid">
-      ${producaoModCard('HOLTER','📊','Holter', hRows, hPrev, ch)}
-      ${producaoModCard('MAPA','🩺','Mapa', mRows, mPrev, cm)}
-      ${producaoModCard('ECG','❤️','ECG', eRows, ePrev, ce)}
+      ${producaoModCard('HOLTER','📊','Holter', hRows, hPrev, ch, hR.data)}
+      ${producaoModCard('MAPA','🩺','Mapa', mRows, mPrev, cm, mR.data)}
+      ${producaoModCard('ECG','❤️','ECG', eRows, ePrev, ce, eR.data)}
     </div>
 
     <!-- YoY por modalidade -->
@@ -159,7 +159,7 @@ function matchInfoMonth(row, month) {
   return mes.includes(nome);
 }
 
-function producaoModCard(tab, emoji, name, rows, prev, c) {
+function producaoModCard(tab, emoji, name, rows, prev, c, allData) {
   const saas   = rows.filter(r => isSaas(r[c.central]));
   const td     = rows.filter(r => !isSaas(r[c.central]));
   const em     = rows.filter(r => (r[c.emerg]||'').toLowerCase() === 'sim').length;
@@ -195,7 +195,7 @@ function producaoModCard(tab, emoji, name, rows, prev, c) {
       </div>
     </div>
     <div class="kpi-label">Evolução 2026</div>
-    ${sparkHTML(getMonthlyTrend(rows, c.date))}
+    ${sparkHTML(getMonthlyTrend(allData || rows, c.date))}
   </div>`;
 }
 
