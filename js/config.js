@@ -15,6 +15,7 @@ const CSV_GIDS = {
   NCTS:          '1774453101',
   INFO_2025:     '2085163821',
   INFO_2026:     '1499671050',
+  FATURAMENTO:   '728532394',
 };
 
 const COLS = {

@@ -3,13 +3,14 @@
 // ═══════════════════════════════════════════════
 
 async function renderFinanceiro() {
-  const [fR, hR, mR, eR, i25R, i26R] = await Promise.all([
+  const [fR, hR, mR, eR, i25R, i26R, fatR] = await Promise.all([
     fetchData('FINANCEIRO'),
     getHolterMerged(),
     fetchData('MAPA'),
     fetchData('ECG'),
     fetchData('INFO_2025'),
     fetchData('INFO_2026'),
+    fetchData('FATURAMENTO'),
   ]);
 
   const cf = COLS.FINANCEIRO, ci = COLS.INFO;
@@ -82,53 +83,58 @@ async function renderFinanceiro() {
   const mxCat   = topCats[0]?.[1] || 1;
   const totalCat= Object.values(cats).reduce((s,v) => s+v, 0);
 
-  // ── Margem por Modalidade ──
-  // Volumes do período
-  const ch = COLS.HOLTER, cm = COLS.MAPA, ce = COLS.ECG;
-  const hRows   = filterPeriod(hR.data, ch.date);
-  const mRows   = filterPeriod(mR.data, cm.date);
-  const eRows   = filterPeriod(eR.data, ce.date);
-  const hSaas   = hRows.filter(r => isSaas(r[ch.central]));
-  const hTd     = hRows.filter(r => !isSaas(r[ch.central]));
-  const mSaas   = mRows.filter(r => isSaas(r[cm.central]));
-  const mTd     = mRows.filter(r => !isSaas(r[cm.central]));
-  const eSaas   = eRows.filter(r => isSaas(r[ce.central]));
-  const eTd     = eRows.filter(r => !isSaas(r[ce.central]));
+  // ── Margem por Modalidade — dados reais da aba FATURAMENTO ──
+  const _norm = s => (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  const _mesLabel = _norm(MONTHS[selMonth]);
 
-  const totalExames = hRows.length + mRows.length + eRows.length;
-  const totalTd     = hTd.length + mTd.length + eTd.length;
-  const totalSaas   = hSaas.length + mSaas.length + eSaas.length;
+  const fatMes = fatR.data.filter(r =>
+    _norm(r[0]) === _mesLabel && Number(r[1]) === selYear
+  );
 
-  // Receitas por tipo via FINANCEIRO
-  const recSaas = proj.filter(r => (r[cf.categoria]||'').startsWith('3.')).reduce((s,r) => s+parseNum(r[cf.valorPrev]), 0);
-  const recTd   = proj.filter(r => (r[cf.categoria]||'').startsWith('1.')).reduce((s,r) => s+parseNum(r[cf.valorPrev]), 0);
-
-  // Custo proporcional: custo total × (exames_tipo / total_exames)
-  const custoUnit = totalExames > 0 ? custo / totalExames : 0;
-  const custoSaas = custoUnit * totalSaas;
-  const custoTd   = custoUnit * totalTd;
-
-  const margSaas = recSaas > 0 ? ((recSaas - custoSaas*(1+TOTAL_IMPOSTOS)) / recSaas * 100) : 0;
-  const margTd   = recTd   > 0 ? ((recTd   - custoTd)                       / recTd   * 100) : 0;
-
-  // TD por modalidade (proporcional ao volume dentro do TD)
-  function margTdMod(modTd) {
-    if (totalTd === 0 || recTd === 0) return 0;
-    const recMod  = recTd * (modTd / totalTd);
-    const custoMod= custoTd * (modTd / totalTd);
-    return recMod > 0 ? ((recMod - custoMod) / recMod * 100) : 0;
+  function recFat(tipo, mod) {
+    const row = fatMes.find(r =>
+      (r[2]||'').trim().toUpperCase() === tipo &&
+      (r[3]||'').trim().toUpperCase() === mod
+    );
+    if (!row) return { qtde: 0, valor: 0, pm: 0 };
+    return { qtde: parseNum(row[4]), valor: parseNum(row[5]), pm: parseNum(row[6]) };
   }
 
-  const margHolterTd = margTdMod(hTd.length);
-  const margMapaTd   = margTdMod(mTd.length);
-  const margEcgTd    = margTdMod(eTd.length);
+  const fatTdEcg      = recFat('TD',       'ECG');
+  const fatTdHolter   = recFat('TD',       'HOLTER');
+  const fatTdMapa     = recFat('TD',       'MAPA');
+  const fatSaasEcg    = recFat('SAAS',     'ECG');
+  const fatSaasHolter = recFat('SAAS',     'HOLTER');
+  const fatSaasMapa   = recFat('SAAS',     'MAPA');
+  const fatSaasTe     = recFat('SAAS',     'TE');
 
-  const margemItens = [
-    { label:'SAAS (todas modalidades)', pct: margSaas,     cor:'var(--cyan)',  detalhe: `Receita: ${fmtCurrK(recSaas)} · ${fmtNum(totalSaas)} exames` },
-    { label:'Holter TD',                pct: margHolterTd, cor:'var(--navy)',  detalhe: `${fmtNum(hTd.length)} exames no período` },
-    { label:'Mapa TD',                  pct: margMapaTd,   cor:'var(--green)', detalhe: `${fmtNum(mTd.length)} exames no período` },
-    { label:'ECG TD',                   pct: margEcgTd,    cor:'#8b5cf6',      detalhe: `${fmtNum(eTd.length)} exames no período` },
-  ].filter(i => i.pct > 0);
+  const hasFatData   = fatMes.length > 0;
+  const recSaasTotal = fatSaasEcg.valor + fatSaasHolter.valor + fatSaasMapa.valor + fatSaasTe.valor;
+  const qtdeSaasTotal= fatSaasEcg.qtde  + fatSaasHolter.qtde  + fatSaasMapa.qtde  + fatSaasTe.qtde;
+
+  // Custo unitário real: custo INFO / total exames faturados
+  const totalQtdeFat = fatTdEcg.qtde + fatTdHolter.qtde + fatTdMapa.qtde + qtdeSaasTotal;
+  const custoUnitFat = hasFatData && totalQtdeFat > 0 ? custo / totalQtdeFat : 0;
+
+  function margemReal(rec, aplicarImposto) {
+    if (rec.valor <= 0) return 0;
+    const c = custoUnitFat * rec.qtde * (aplicarImposto ? (1 + TOTAL_IMPOSTOS) : 1);
+    return (rec.valor - c) / rec.valor * 100;
+  }
+
+  const margEcgTdR    = margemReal(fatTdEcg,    false);
+  const margHolterTdR = margemReal(fatTdHolter,  false);
+  const margMapaTdR   = margemReal(fatTdMapa,    false);
+  const margSaasR     = recSaasTotal > 0
+    ? (recSaasTotal - custoUnitFat * qtdeSaasTotal * (1 + TOTAL_IMPOSTOS)) / recSaasTotal * 100
+    : 0;
+
+  const margemItens = hasFatData ? [
+    { label: 'SAAS (todas modalidades)', pct: margSaasR,     cor: 'var(--cyan)',  detalhe: `Receita: ${fmtCurrK(recSaasTotal)} · ${fmtNum(qtdeSaasTotal)} exames` },
+    { label: 'Holter TD',               pct: margHolterTdR, cor: '#10b981',      detalhe: `PM real: ${fmtCurrK(fatTdHolter.pm)} · ${fmtNum(fatTdHolter.qtde)} exames` },
+    { label: 'Mapa TD',                 pct: margMapaTdR,   cor: '#ef4444',      detalhe: `PM real: ${fmtCurrK(fatTdMapa.pm)} · ${fmtNum(fatTdMapa.qtde)} exames` },
+    { label: 'ECG TD',                  pct: margEcgTdR,    cor: '#9ca3af',      detalhe: `PM real: ${fmtCurrK(fatTdEcg.pm)} · ${fmtNum(fatTdEcg.qtde)} exames` },
+  ].filter(i => i.pct > 0) : [];
 
   // YoY financeiro
   const filled25 = getInfoFilled(i25R.data);
@@ -197,9 +203,9 @@ async function renderFinanceiro() {
     <div class="two-col">
       <div class="card">
         <div class="card-title">📐 Margem por Modalidade
-          <span title="Custo alocado proporcionalmente ao volume de exames">estimativa proporcional</span>
+          <span style="font-size:11px;font-weight:400;color:var(--text-soft)">${hasFatData ? 'dados reais de faturamento' : 'estimativa proporcional'}</span>
         </div>
-        ${margemItens.length ? margemModHTML(margemItens) : '<p class="no-data">Sem dados suficientes para o período</p>'}
+        ${margemItens.length ? margemModHTML(margemItens) : '<p class="no-data">Sem dados de faturamento para ' + MONTHS[selMonth] + '/' + selYear + '</p>'}
       </div>
 
       <!-- Receita por categoria -->
