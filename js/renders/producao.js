@@ -31,19 +31,25 @@ async function renderProducao() {
     );
   }
 
-  const hol26arr = countByMonth(hR.data, ch.date, 2026, filled26.length || 4);
-  const map26arr = countByMonth(mR.data, cm.date, 2026, filled26.length || 4);
-  const ecg26arr = countByMonth(eR.data, ce.date, 2026, filled26.length || 4);
+  const hol26arr = countByMonth(hR.data, ch.dateSolic, 2026, filled26.length || 4);
+  const map26arr = countByMonth(mR.data, cm.dateSolic, 2026, filled26.length || 4);
+  const ecg26arr = countByMonth(eR.data, ce.dateSolic, 2026, filled26.length || 4);
   // TE: sem aba live ainda — usar INFO_2026 quando preenchido
   const te26arr  = filled26.map(r => parseIntBR(r[ci.te]));
 
-  // Período atual
-  const hRows = filterPeriod(hR.data, ch.date);
-  const mRows = filterPeriod(mR.data, cm.date);
-  const eRows = filterPeriod(eR.data, ce.date);
-  const hPrev = filterPrevPeriod(hR.data, ch.date);
-  const mPrev = filterPrevPeriod(mR.data, cm.date);
-  const ePrev = filterPrevPeriod(eR.data, ce.date);
+  // Período atual — solicitação (col B) e conclusão (col C/D)
+  const hRows = filterPeriod(hR.data, ch.dateSolic);
+  const mRows = filterPeriod(mR.data, cm.dateSolic);
+  const eRows = filterPeriod(eR.data, ce.dateSolic);
+  const hConc = filterPeriod(hR.data, ch.dateConc);
+  const mConc = filterPeriod(mR.data, cm.dateConc);
+  const eConc = filterPeriod(eR.data, ce.dateConc);
+  const hPrev = filterPrevPeriod(hR.data, ch.dateSolic);
+  const mPrev = filterPrevPeriod(mR.data, cm.dateSolic);
+  const ePrev = filterPrevPeriod(eR.data, ce.dateSolic);
+  const hPrevConc = filterPrevPeriod(hR.data, ch.dateConc);
+  const mPrevConc = filterPrevPeriod(mR.data, cm.dateConc);
+  const ePrevConc = filterPrevPeriod(eR.data, ce.dateConc);
 
   // INFO do mês selecionado 2025
   const info25 = i25R.data.find(r => matchInfoMonth(r, selMonth));
@@ -52,8 +58,10 @@ async function renderProducao() {
   const ecg25m = info25 ? parseIntBR(info25[ci.ecg])    : 0;
   const te25m  = info25 ? parseIntBR(info25[ci.te])     : 0;
 
-  const tot26    = hRows.length + mRows.length + eRows.length;
-  const tot26P   = hPrev.length + mPrev.length + ePrev.length;
+  const tot26     = hRows.length + mRows.length + eRows.length;        // solicitados
+  const tot26Conc = hConc.length + mConc.length + eConc.length;        // concluídos
+  const tot26P    = hPrev.length + mPrev.length + ePrev.length;
+  const tot26PConc= hPrevConc.length + mPrevConc.length + ePrevConc.length;
   const tot25m   = hol25m + map25m + ecg25m + te25m;
   const tot26arr = hol26arr.map((v,i) => v + (map26arr[i]||0) + (ecg26arr[i]||0));
   const tot25arr = hol25arr.map((v,i) => v + (map25arr[i]||0) + (ecg25arr[i]||0) + (te25arr[i]||0));
@@ -69,40 +77,40 @@ async function renderProducao() {
     <!-- KPIs totais -->
     <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
       <div class="kpi-card navy-card">
-        <div class="kpi-label">Total Exames</div>
-        <div class="kpi-value">${fmtNum(tot26)}</div>
-        <div class="kpi-sub">Holter + Mapa + ECG</div>
-        ${cmpHTML(tot26, tot26P)}
-        ${yoyCmpHTML(tot26, tot25m)}
+        <div class="kpi-label">Exames Concluídos</div>
+        <div class="kpi-value">${fmtNum(tot26Conc)}</div>
+        <div class="kpi-sub">📋 Solicitados: <strong>${fmtNum(tot26)}</strong></div>
+        ${cmpHTML(tot26Conc, tot26PConc)}
+        ${yoyCmpHTML(tot26Conc, tot25m)}
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Holter</div>
-        <div class="kpi-value">${fmtNum(hRows.length)}</div>
-        <div class="kpi-sub">SAAS: ${fmtNum(hRows.filter(r=>isSaas(r[ch.central])).length)}</div>
-        ${cmpHTML(hRows.length, hPrev.length)}
-        ${yoyCmpHTML(hRows.length, hol25m)}
+        <div class="kpi-value">${fmtNum(hConc.length)}</div>
+        <div class="kpi-sub">Solic.: ${fmtNum(hRows.length)} · SAAS: ${fmtNum(hRows.filter(r=>isSaas(r[ch.central])).length)}</div>
+        ${cmpHTML(hConc.length, hPrevConc.length)}
+        ${yoyCmpHTML(hConc.length, hol25m)}
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Mapa</div>
-        <div class="kpi-value">${fmtNum(mRows.length)}</div>
-        <div class="kpi-sub">SAAS: ${fmtNum(mRows.filter(r=>isSaas(r[cm.central])).length)}</div>
-        ${cmpHTML(mRows.length, mPrev.length)}
-        ${yoyCmpHTML(mRows.length, map25m)}
+        <div class="kpi-value">${fmtNum(mConc.length)}</div>
+        <div class="kpi-sub">Solic.: ${fmtNum(mRows.length)} · SAAS: ${fmtNum(mRows.filter(r=>isSaas(r[cm.central])).length)}</div>
+        ${cmpHTML(mConc.length, mPrevConc.length)}
+        ${yoyCmpHTML(mConc.length, map25m)}
       </div>
       <div class="kpi-card">
         <div class="kpi-label">ECG</div>
-        <div class="kpi-value">${fmtNum(eRows.length)}</div>
-        <div class="kpi-sub">SAAS: ${fmtNum(eRows.filter(r=>isSaas(r[ce.central])).length)}</div>
-        ${cmpHTML(eRows.length, ePrev.length)}
-        ${yoyCmpHTML(eRows.length, ecg25m)}
+        <div class="kpi-value">${fmtNum(eConc.length)}</div>
+        <div class="kpi-sub">Solic.: ${fmtNum(eRows.length)} · SAAS: ${fmtNum(eRows.filter(r=>isSaas(r[ce.central])).length)}</div>
+        ${cmpHTML(eConc.length, ePrevConc.length)}
+        ${yoyCmpHTML(eConc.length, ecg25m)}
       </div>
     </div>
 
     <!-- Cards de detalhe por modalidade -->
     <div class="mod-grid">
-      ${producaoModCard('HOLTER','📊','Holter', hRows, hPrev, ch, hR.data)}
-      ${producaoModCard('MAPA','🩺','Mapa', mRows, mPrev, cm, mR.data)}
-      ${producaoModCard('ECG','❤️','ECG', eRows, ePrev, ce, eR.data)}
+      ${producaoModCard('HOLTER','📊','Holter', hRows, hPrev, ch, hR.data, hConc)}
+      ${producaoModCard('MAPA','🩺','Mapa', mRows, mPrev, cm, mR.data, mConc)}
+      ${producaoModCard('ECG','❤️','ECG', eRows, ePrev, ce, eR.data, eConc)}
     </div>
 
     <!-- YoY por modalidade -->
@@ -151,13 +159,12 @@ function matchInfoMonth(row, month) {
   return mes.includes(nome);
 }
 
-function producaoModCard(tab, emoji, name, rows, prev, c, allData) {
-  const saas   = rows.filter(r => isSaas(r[c.central]));
-  const td     = rows.filter(r => !isSaas(r[c.central]));
-  const em     = rows.filter(r => (r[c.emerg]||'').toLowerCase() === 'sim').length;
-  const avgT   = avgSecs(rows, c.tempo);
-  const avgPrev= avgSecs(prev, c.tempo);
-  const trend  = getTrend(rows, c.date);
+function producaoModCard(tab, emoji, name, rows, prev, c, allData, concRows) {
+  const saas    = rows.filter(r => isSaas(r[c.central]));
+  const em      = rows.filter(r => (r[c.emerg]||'').toLowerCase() === 'sim').length;
+  const avgT    = avgSecs(rows, c.tempo);
+  const avgPrev = avgSecs(prev, c.tempo);
+  const conc    = concRows ? concRows.length : null;
 
   return `<div class="mod-card">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
@@ -166,8 +173,9 @@ function producaoModCard(tab, emoji, name, rows, prev, c, allData) {
     </div>
     <div class="kpi-grid" style="grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
       <div>
-        <div class="kpi-label">Total</div>
-        <div class="kpi-value" style="font-size:28px">${fmtNum(rows.length)}</div>
+        <div class="kpi-label">Concluídos</div>
+        <div class="kpi-value" style="font-size:28px">${conc !== null ? fmtNum(conc) : fmtNum(rows.length)}</div>
+        <div class="kpi-sub" style="font-size:11px">Solic.: ${fmtNum(rows.length)}</div>
         ${cmpHTML(rows.length, prev.length)}
       </div>
       <div>
@@ -187,7 +195,7 @@ function producaoModCard(tab, emoji, name, rows, prev, c, allData) {
       </div>
     </div>
     <div class="kpi-label">Evolução 2026</div>
-    ${sparkHTML(getMonthlyTrend(allData || rows, c.date))}
+    ${sparkHTML(getMonthlyTrend(allData || rows, c.dateSolic))}
   </div>`;
 }
 

@@ -15,15 +15,23 @@ async function renderGeral() {
 
   const ch = COLS.HOLTER, cm = COLS.MAPA, ce = COLS.ECG, cr = COLS.REPETICAO, cf = COLS.FINANCEIRO;
 
-  // Exames do período atual e anterior
-  const hRows = filterPeriod(hR.data, ch.date);
-  const mRows = filterPeriod(mR.data, cm.date);
-  const eRows = filterPeriod(eR.data, ce.date);
-  const hPrev = filterPrevPeriod(hR.data, ch.date);
-  const mPrev = filterPrevPeriod(mR.data, cm.date);
-  const ePrev = filterPrevPeriod(eR.data, ce.date);
-  const tot  = hRows.length + mRows.length + eRows.length;
-  const totP = hPrev.length + mPrev.length + ePrev.length;
+  // Exames do período atual — por solicitação (col B) e conclusão (col C)
+  const hRows = filterPeriod(hR.data, ch.dateSolic);
+  const mRows = filterPeriod(mR.data, cm.dateSolic);
+  const eRows = filterPeriod(eR.data, ce.dateSolic);
+  const hConc = filterPeriod(hR.data, ch.dateConc);
+  const mConc = filterPeriod(mR.data, cm.dateConc);
+  const eConc = filterPeriod(eR.data, ce.dateConc);
+  const hPrev = filterPrevPeriod(hR.data, ch.dateSolic);
+  const mPrev = filterPrevPeriod(mR.data, cm.dateSolic);
+  const ePrev = filterPrevPeriod(eR.data, ce.dateSolic);
+  const hPrevConc = filterPrevPeriod(hR.data, ch.dateConc);
+  const mPrevConc = filterPrevPeriod(mR.data, cm.dateConc);
+  const ePrevConc = filterPrevPeriod(eR.data, ce.dateConc);
+  const tot     = hRows.length + mRows.length + eRows.length;   // solicitados
+  const totConc = hConc.length + mConc.length + eConc.length;   // concluídos
+  const totP    = hPrev.length + mPrev.length + ePrev.length;
+  const totPConc= hPrevConc.length + mPrevConc.length + ePrevConc.length;
 
   // Taxa de repetição
   const repAll  = filterPeriod(rR.data, cr.date);
@@ -74,9 +82,9 @@ async function renderGeral() {
   // YoY exames 2026 — puxar dos dados reais (agrupados por mês)
   const tot26arr = MONTHS_SHORT.slice(0, filled26.length).map((_, idx) => {
     const m = idx, y = 2026;
-    const h = hR.data.filter(r => { const d = parseDate(r[ch.date]); return d && d.getMonth()===m && d.getFullYear()===y; }).length;
-    const mp = mR.data.filter(r => { const d = parseDate(r[cm.date]); return d && d.getMonth()===m && d.getFullYear()===y; }).length;
-    const e  = eR.data.filter(r => { const d = parseDate(r[ce.date]); return d && d.getMonth()===m && d.getFullYear()===y; }).length;
+    const h = hR.data.filter(r => { const d = parseDate(r[ch.dateSolic]); return d && d.getMonth()===m && d.getFullYear()===y; }).length;
+    const mp = mR.data.filter(r => { const d = parseDate(r[cm.dateSolic]); return d && d.getMonth()===m && d.getFullYear()===y; }).length;
+    const e  = eR.data.filter(r => { const d = parseDate(r[ce.dateSolic]); return d && d.getMonth()===m && d.getFullYear()===y; }).length;
     return h + mp + e;
   });
 
@@ -91,11 +99,13 @@ async function renderGeral() {
     <!-- KPIs principais -->
     <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
       <div class="kpi-card navy-card">
-        <div class="kpi-label">Exames Laudados</div>
-        <div class="kpi-value">${fmtNum(tot)}</div>
-        <div class="kpi-sub">Holter + Mapa + ECG</div>
-        ${cmpHTML(tot, totP)}
-        ${tot25 ? yoyCmpHTML(tot, tot25) : ''}
+        <div class="kpi-label">Exames Concluídos</div>
+        <div class="kpi-value">${fmtNum(totConc)}</div>
+        <div class="kpi-sub" style="display:flex;gap:10px;flex-wrap:wrap">
+          <span>📋 Solicitados: <strong>${fmtNum(tot)}</strong></span>
+        </div>
+        ${cmpHTML(totConc, totPConc)}
+        ${tot25 ? yoyCmpHTML(totConc, tot25) : ''}
       </div>
       <div class="kpi-card ${faturamento ? 'cyan-card' : ''}">
         <div class="kpi-label">Faturamento</div>
@@ -123,9 +133,9 @@ async function renderGeral() {
       <div class="section-sub">${pLabel()}</div>
     </div>
     <div class="overview-grid">
-      ${geralSectorCard('HOLTER','📊','Holter',hRows,hPrev,ch,hol25)}
-      ${geralSectorCard('MAPA','🩺','Mapa',mRows,mPrev,cm,map25)}
-      ${geralSectorCard('ECG','❤️','ECG',eRows,ePrev,ce,ecg25)}
+      ${geralSectorCard('HOLTER','📊','Holter',hRows,hPrev,ch,hol25,hConc)}
+      ${geralSectorCard('MAPA','🩺','Mapa',mRows,mPrev,cm,map25,mConc)}
+      ${geralSectorCard('ECG','❤️','ECG',eRows,ePrev,ce,ecg25,eConc)}
       <div class="overview-sector" onclick="switchTab('REPETICAO')" style="cursor:pointer">
         <div class="sector-header"><span class="sector-emoji">🔁</span><span class="sector-name">Repetição</span></div>
         <div class="sector-kpis">
@@ -152,15 +162,17 @@ async function renderGeral() {
   `;
 }
 
-function geralSectorCard(tab, emoji, name, rows, prev, c, count25) {
+function geralSectorCard(tab, emoji, name, rows, prev, c, count25, concRows) {
   const saas = rows.filter(r => isSaas(r[c.central])).length;
   const em   = rows.filter(r => (r[c.emerg]||'').toLowerCase() === 'sim').length;
+  const conc = concRows ? concRows.length : null;
   return `<div class="overview-sector" onclick="switchTab('PRODUCAO')" style="cursor:pointer">
     <div class="sector-header"><span class="sector-emoji">${emoji}</span><span class="sector-name">${name}</span></div>
     <div class="sector-kpis">
       <div>
-        <div class="sector-kpi-label">Exames</div>
-        <div class="sector-kpi-val">${fmtNum(rows.length)}</div>
+        <div class="sector-kpi-label">Concluídos</div>
+        <div class="sector-kpi-val">${conc !== null ? fmtNum(conc) : fmtNum(rows.length)}</div>
+        <div class="sector-kpi-sub" style="color:var(--text-soft);font-size:11px">Solic.: ${fmtNum(rows.length)}</div>
         ${cmpHTML(rows.length, prev.length)}
         ${count25 ? yoyCmpHTML(rows.length, count25) : ''}
       </div>
