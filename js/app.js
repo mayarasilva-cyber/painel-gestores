@@ -86,6 +86,7 @@ async function loadTab(tab) {
     else if (tab === 'REPETICAO') await renderRepeticao();
     else if (tab === 'FINANCEIRO')await renderFinanceiro();
     else if (tab === 'NCTS')      await renderNCTs();
+    else if (tab === 'GERENCIAL') renderGerencial();
     document.getElementById('lastUpd').textContent =
       'Atualizado ' + new Date().toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
   } catch (e) {

@@ -19,9 +19,9 @@ const CSV_GIDS = {
 };
 
 const COLS = {
-  HOLTER:    { date:1, emerg:0, tempo:4, central:7 },
-  MAPA:      { date:1, emerg:0, tempo:4, central:6 },
-  ECG:       { date:2, emerg:0, tempo:4, central:6 },
+  HOLTER:    { date:1, dateSolic:1, dateConc:2, emerg:0, tempo:4, central:7 },
+  MAPA:      { date:1, dateSolic:1, dateConc:2, emerg:0, tempo:4, central:6 },
+  ECG:       { date:2, dateSolic:2, dateConc:3, emerg:0, tempo:4, central:6 },
   REPETICAO: { date:0, central:1, analista:2, motivo:3, saaslaudo:9, modalidade:10 },
   CHAMADOS:  { status:0, date:1, atendente:4, origem:6, tipoSolic:8, tempo:11 },
   FINANCEIRO:{ tipo:0, categoria:1, status:4, banco:5, valorPrev:6, valorReal:7, dataPrev:8, dataReal:9 },

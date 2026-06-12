@@ -92,7 +92,8 @@ async function getHolterMerged() {
   try { iem = (await fetchData('HOLTER_IEM')).data; } catch (e) {}
   const mapped = iem.map(r => {
     const a = new Array(11).fill('');
-    a[0] = 'Não'; a[1] = r[2] || ''; a[4] = ''; a[7] = '[Saas]Alemanha IEM';
+    // Col C (índice 2) do IEM = única data disponível, usada como solic e conc
+    a[0] = 'Não'; a[1] = r[2] || ''; a[2] = r[2] || ''; a[4] = ''; a[7] = '[Saas]Alemanha IEM';
     return a;
   });
   return { data: [...h, ...mapped] };
