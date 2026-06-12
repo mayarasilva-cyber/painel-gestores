@@ -22,18 +22,12 @@ async function renderProducao() {
   const map25arr = filled25.map(r => parseIntBR(r[ci.mapa]));
   const te25arr  = filled25.map(r => parseIntBR(r[ci.te]));
 
-  // Arrays mensais 2026 — dos dados reais
+  // Arrays mensais 2026 — INFO-aware: meses fechados via INFORMAÇÕES_2026, mês corrente ao vivo
   const ch = COLS.HOLTER, cm = COLS.MAPA, ce = COLS.ECG;
 
-  function countByMonth(data, dateCol, y, nMonths) {
-    return Array.from({length: nMonths}, (_, m) =>
-      data.filter(r => { const d = parseDate(r[dateCol]); return d && d.getMonth() === m && d.getFullYear() === y; }).length
-    );
-  }
-
-  const hol26arr = countByMonth(hR.data, ch.dateSolic, 2026, filled26.length || 4);
-  const map26arr = countByMonth(mR.data, cm.dateSolic, 2026, filled26.length || 4);
-  const ecg26arr = countByMonth(eR.data, ce.dateSolic, 2026, filled26.length || 4);
+  const hol26arr = infoTrendArr(filled26, ci.holter, hR.data, ch.dateConc);
+  const map26arr = infoTrendArr(filled26, ci.mapa,   mR.data, cm.dateConc);
+  const ecg26arr = infoTrendArr(filled26, ci.ecg,    eR.data, ce.dateConc);
   // TE: sem aba live ainda — usar INFO_2026 quando preenchido
   const te26arr  = filled26.map(r => parseIntBR(r[ci.te]));
 
@@ -108,9 +102,9 @@ async function renderProducao() {
 
     <!-- Cards de detalhe por modalidade -->
     <div class="mod-grid">
-      ${producaoModCard('HOLTER','📊','Holter', hRows, hPrev, ch, hR.data, hConc)}
-      ${producaoModCard('MAPA','🩺','Mapa', mRows, mPrev, cm, mR.data, mConc)}
-      ${producaoModCard('ECG','❤️','ECG', eRows, ePrev, ce, eR.data, eConc)}
+      ${producaoModCard('HOLTER','📊','Holter', hRows, hPrev, ch, hR.data, hConc, filled26, ci.holter)}
+      ${producaoModCard('MAPA','🩺','Mapa', mRows, mPrev, cm, mR.data, mConc, filled26, ci.mapa)}
+      ${producaoModCard('ECG','❤️','ECG', eRows, ePrev, ce, eR.data, eConc, filled26, ci.ecg)}
     </div>
 
     <!-- YoY por modalidade -->
@@ -159,7 +153,7 @@ function matchInfoMonth(row, month) {
   return mes.includes(nome);
 }
 
-function producaoModCard(tab, emoji, name, rows, prev, c, allData, concRows) {
+function producaoModCard(tab, emoji, name, rows, prev, c, allData, concRows, filled26, infoCol) {
   const saas    = rows.filter(r => isSaas(r[c.central]));
   const em      = rows.filter(r => (r[c.emerg]||'').toLowerCase() === 'sim').length;
   const avgT    = avgSecs(rows, c.tempo);
@@ -195,7 +189,7 @@ function producaoModCard(tab, emoji, name, rows, prev, c, allData, concRows) {
       </div>
     </div>
     <div class="kpi-label">Evolução 2026</div>
-    ${sparkHTML(getMonthlyTrend(allData || rows, c.dateSolic))}
+    ${sparkHTML(filled26 ? infoTrendBars(filled26, infoCol, allData || rows, c.dateConc) : getMonthlyTrend(allData || rows, c.dateSolic))}
   </div>`;
 }
 

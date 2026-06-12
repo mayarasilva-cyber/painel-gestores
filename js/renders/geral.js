@@ -79,16 +79,25 @@ async function renderGeral() {
   const fat26arr  = filled26.map(r => parseNum(r[ci.fat]));
   const tot25arr  = filled25.map(r => parseIntBR(r[ci.ecg])+parseIntBR(r[ci.holter])+parseIntBR(r[ci.mapa])+parseIntBR(r[ci.te]));
 
-  // YoY exames 2026 — puxar dos dados reais (agrupados por mês)
-  const tot26arr = MONTHS_SHORT.slice(0, filled26.length).map((_, idx) => {
-    const m = idx, y = 2026;
-    const h = hR.data.filter(r => { const d = parseDate(r[ch.dateSolic]); return d && d.getMonth()===m && d.getFullYear()===y; }).length;
-    const mp = mR.data.filter(r => { const d = parseDate(r[cm.dateSolic]); return d && d.getMonth()===m && d.getFullYear()===y; }).length;
-    const e  = eR.data.filter(r => { const d = parseDate(r[ce.dateSolic]); return d && d.getMonth()===m && d.getFullYear()===y; }).length;
-    return h + mp + e;
-  });
+  // YoY exames 2026 — INFO-aware: meses fechados via INFORMAÇÕES_2026, mês corrente ao vivo
+  const hol26arr = infoTrendArr(filled26, ci.holter, hR.data, ch.dateConc);
+  const map26arr = infoTrendArr(filled26, ci.mapa,   mR.data, cm.dateConc);
+  const ecg26arr = infoTrendArr(filled26, ci.ecg,    eR.data, ce.dateConc);
+  const tot26arr = hol26arr.map((v, i) => v + (map26arr[i] || 0) + (ecg26arr[i] || 0));
+
+  // Hero executivo — financeiro do mês selecionado se fechado, senão último mês fechado
+  const heroRow  = faturamento ? infoRow : (filled26[filled26.length - 1] || null);
+  const heroIdx  = heroRow ? infoMonthIdxFor(heroRow) : selMonth;
+  const heroRow25 = filled25.find(r => infoMonthIdxFor(r) === heroIdx) || null;
+  const heroEmAndamento = !faturamento && heroRow;
+
+  // Mês corrente (incompleto): comparativos mês-a-mês / YoY de exames seriam parcial-vs-cheio → enganosos
+  const hoje = new Date();
+  const isMesCorrente = selMonth === hoje.getMonth() && selYear === hoje.getFullYear();
 
   document.getElementById('mainContent').innerHTML = `
+    ${geralExecHero(heroRow, heroIdx, heroRow25, heroEmAndamento)}
+
     <div class="section-bar">
       <div>
         <div class="section-title">🏠 Visão Geral</div>
@@ -104,20 +113,21 @@ async function renderGeral() {
         <div class="kpi-sub" style="display:flex;gap:10px;flex-wrap:wrap">
           <span>📋 Solicitados: <strong>${fmtNum(tot)}</strong></span>
         </div>
-        ${cmpHTML(totConc, totPConc)}
-        ${tot25 ? yoyCmpHTML(totConc, tot25) : ''}
+        ${isMesCorrente
+          ? `<div class="cmp neutral">🔵 mês em andamento</div>`
+          : `${cmpHTML(totConc, totPConc)}${tot25 ? yoyCmpHTML(totConc, tot25) : ''}`}
       </div>
       <div class="kpi-card ${faturamento ? 'cyan-card' : ''}">
         <div class="kpi-label">Faturamento</div>
         <div class="kpi-value" style="${!faturamento?'color:var(--text-soft);font-size:20px':''}">${faturamento ? fmtCurrK(faturamento) : 'Ver Financeiro'}</div>
         <div class="kpi-sub">bruto no período</div>
-        ${fat25 ? yoyCmpHTML(faturamento, fat25) : ''}
+        ${(faturamento && fat25) ? yoyCmpHTML(faturamento, fat25) : ''}
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Margem Bruta</div>
         <div class="kpi-value" style="font-size:28px;color:${margemBruta>50?'var(--green)':margemBruta>30?'var(--amber)':'var(--red)'}">${margemBruta ? fmtPct(margemBruta) : '—'}</div>
         <div class="kpi-sub">receita líquida / faturamento</div>
-        ${margem25 ? yoyCmpHTML(margemBruta, margem25) : ''}
+        ${(margemBruta && margem25) ? yoyCmpHTML(margemBruta, margem25) : ''}
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Taxa de Repetição</div>
@@ -133,9 +143,9 @@ async function renderGeral() {
       <div class="section-sub">${pLabel()}</div>
     </div>
     <div class="overview-grid">
-      ${geralSectorCard('HOLTER','📊','Holter',hRows,hPrev,ch,hol25,hConc)}
-      ${geralSectorCard('MAPA','🩺','Mapa',mRows,mPrev,cm,map25,mConc)}
-      ${geralSectorCard('ECG','❤️','ECG',eRows,ePrev,ce,ecg25,eConc)}
+      ${geralSectorCard('HOLTER','📊','Holter',hRows,hPrev,ch,hol25,hConc,isMesCorrente)}
+      ${geralSectorCard('MAPA','🩺','Mapa',mRows,mPrev,cm,map25,mConc,isMesCorrente)}
+      ${geralSectorCard('ECG','❤️','ECG',eRows,ePrev,ce,ecg25,eConc,isMesCorrente)}
       <div class="overview-sector" onclick="switchTab('REPETICAO')" style="cursor:pointer">
         <div class="sector-header"><span class="sector-emoji">🔁</span><span class="sector-name">Repetição</span></div>
         <div class="sector-kpis">
@@ -162,7 +172,74 @@ async function renderGeral() {
   `;
 }
 
-function geralSectorCard(tab, emoji, name, rows, prev, c, count25, concRows) {
+// ── Hero executivo · escopo .exec-* · dados ao vivo / INFO ──
+function execDelta(cur, prev, invert = false) {
+  if (!prev || !cur) return '';
+  const d = (cur - prev) / prev * 100;
+  const positivo = d >= 0;
+  const bom = invert ? !positivo : positivo;
+  return `<span class="exec-d ${Math.abs(d) < 0.05 ? 'flat' : (bom ? 'up' : 'down')}">${positivo ? '▲' : '▼'} ${Math.abs(d).toFixed(1)}% <small>vs 2025</small></span>`;
+}
+
+function geralExecHero(row, monthIdx, row25, emAndamento) {
+  const ci = COLS.INFO;
+  if (!row) return '';
+
+  const faturamento = parseNum(row[ci.fat]);
+  const margemBruta = parsePct(row[ci.margem]);
+  const ebitda      = parsePct(row[ci.ebitda]);
+  const lucroLiq    = parseNum(row[ci.lucro]);
+  const exames      = parseIntBR(row[ci.holter]) + parseIntBR(row[ci.mapa]) + parseIntBR(row[ci.ecg]) + parseIntBR(row[ci.te]);
+
+  const fat25    = row25 ? parseNum(row25[ci.fat])     : 0;
+  const margem25 = row25 ? parsePct(row25[ci.margem])  : 0;
+  const exames25 = row25 ? (parseIntBR(row25[ci.holter]) + parseIntBR(row25[ci.mapa]) + parseIntBR(row25[ci.ecg]) + parseIntBR(row25[ci.te])) : 0;
+
+  const mesLabel = `${MONTHS[monthIdx]} ${selYear}`;
+  const kicker = emAndamento
+    ? `Resumo Executivo · Último mês fechado`
+    : `Resumo Executivo · Controladoria 2026`;
+
+  // Veredito orientado a dados
+  let verdict;
+  if (lucroLiq < 0)                          verdict = 'Atenção: resultado líquido negativo no mês — revisar estrutura de custos.';
+  else if (ebitda >= 20 && margemBruta >= 50) verdict = 'Mês saudável: margens dentro da meta e geração de caixa operacional consistente.';
+  else if (margemBruta >= 40)                verdict = 'Resultado dentro do esperado; acompanhar a evolução das margens.';
+  else                                       verdict = 'Margens pressionadas no período — atenção ao mix de custos e despesas.';
+
+  return `<div class="exec-hero">
+    <div class="exec-left">
+      <div class="exec-kicker">${kicker}</div>
+      <div class="exec-title">${mesLabel}</div>
+      <div class="exec-verdict">${verdict}</div>
+      <div class="exec-fat-label">Faturamento Bruto · Realizado</div>
+      <div class="exec-fat">${faturamento ? fmtCurrK(faturamento) : '—'}</div>
+      ${fat25 ? execDelta(faturamento, fat25) : ''}
+    </div>
+    <div class="exec-stats">
+      <div class="exec-stat">
+        <div class="l">EBITDA</div>
+        <div class="v">${ebitda ? fmtPct(ebitda) : '—'}</div>
+      </div>
+      <div class="exec-stat">
+        <div class="l">Margem Bruta</div>
+        <div class="v">${margemBruta ? fmtPct(margemBruta) : '—'}</div>
+        ${margem25 ? execDelta(margemBruta, margem25) : ''}
+      </div>
+      <div class="exec-stat">
+        <div class="l">Lucro Líquido</div>
+        <div class="v">${lucroLiq ? fmtCurrK(lucroLiq) : '—'}</div>
+      </div>
+      <div class="exec-stat">
+        <div class="l">Exames no Mês</div>
+        <div class="v">${fmtNum(exames)}</div>
+        ${exames25 ? execDelta(exames, exames25) : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function geralSectorCard(tab, emoji, name, rows, prev, c, count25, concRows, isMesCorrente) {
   const saas = rows.filter(r => isSaas(r[c.central])).length;
   const em   = rows.filter(r => (r[c.emerg]||'').toLowerCase() === 'sim').length;
   const conc = concRows ? concRows.length : null;
@@ -173,8 +250,9 @@ function geralSectorCard(tab, emoji, name, rows, prev, c, count25, concRows) {
         <div class="sector-kpi-label">Concluídos</div>
         <div class="sector-kpi-val">${conc !== null ? fmtNum(conc) : fmtNum(rows.length)}</div>
         <div class="sector-kpi-sub" style="color:var(--text-soft);font-size:11px">Solic.: ${fmtNum(rows.length)}</div>
-        ${cmpHTML(rows.length, prev.length)}
-        ${count25 ? yoyCmpHTML(rows.length, count25) : ''}
+        ${isMesCorrente
+          ? `<div class="cmp neutral" style="font-size:11px">🔵 em andamento</div>`
+          : `${cmpHTML(rows.length, prev.length)}${count25 ? yoyCmpHTML(rows.length, count25) : ''}`}
       </div>
       <div>
         <div class="sector-kpi-label">Média Laudo</div>

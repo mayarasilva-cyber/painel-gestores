@@ -466,3 +466,43 @@ tr:last-child td { border-bottom: none; }
 .mod-name { font-family: Bricolage Grotesque, sans-serif; font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
 .mod-count { font-family: Bricolage Grotesque, sans-serif; font-size: 32px; font-weight: 800; color: var(--navy); letter-spacing: -.5px; line-height: 1; }
 .mod-sub { font-size: 12px; color: var(--text-soft); font-weight: 600; margin-top: 4px; }
+
+/* ─── HERO EXECUTIVO (Visão Geral) — escopo .exec-* ─── */
+.exec-hero {
+  position: relative; overflow: hidden;
+  background: linear-gradient(160deg, var(--navy) 0%, #0a3d6e 70%, #0c5a9e 100%);
+  border-radius: 20px; color: #fff;
+  padding: 22px 26px; margin-bottom: 16px;
+  box-shadow: 0 10px 30px rgba(13,33,55,.28);
+  display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1.4fr);
+  gap: 20px 28px; align-items: center;
+}
+.exec-hero::after {
+  content: ''; position: absolute; right: -80px; top: -80px;
+  width: 260px; height: 260px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(14,165,233,.35), transparent 70%); pointer-events: none;
+}
+.exec-left { position: relative; z-index: 1; }
+.exec-kicker { font-size: 10.5px; font-weight: 800; letter-spacing: 1.6px; text-transform: uppercase; color: #9fd8f8; }
+.exec-title { font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 800; line-height: 1.05; margin: 4px 0 6px; }
+.exec-verdict { font-size: 12.5px; color: #cfe7f7; font-weight: 600; line-height: 1.45; max-width: 360px; }
+.exec-fat-label { font-size: 10.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #9fd8f8; margin-top: 16px; }
+.exec-fat { font-family: 'Bricolage Grotesque', sans-serif; font-size: 40px; font-weight: 800; line-height: 1.05; margin: 2px 0 6px; }
+.exec-stats { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.exec-stat {
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px; padding: 12px 14px;
+}
+.exec-stat .l { font-size: 10px; font-weight: 800; letter-spacing: .9px; text-transform: uppercase; color: #9fd8f8; }
+.exec-stat .v { font-family: 'Bricolage Grotesque', sans-serif; font-size: 24px; font-weight: 800; color: #fff; margin-top: 3px; line-height: 1; }
+.exec-stat .v small { font-family: 'Nunito', sans-serif; font-size: 12px; font-weight: 700; color: #bfe9ff; }
+.exec-d { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; margin-top: 5px; }
+.exec-d small { font-weight: 700; color: rgba(255,255,255,.55); }
+.exec-d.up { color: #6ee7b7; }
+.exec-d.down { color: #fca5a5; }
+.exec-d.flat { color: rgba(255,255,255,.6); }
+@media (max-width: 900px) {
+  .exec-hero { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
+  .exec-fat { font-size: 34px; }
+}
+@media (max-width: 560px) { .exec-stats { grid-template-columns: 1fr; } }

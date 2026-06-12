@@ -34,6 +34,43 @@ function getTrend(data, dateCol, countFn) {
   return viewMode === 'month' ? getMonthlyTrend(data, dateCol, countFn) : getWeeklyTrend(data, dateCol, countFn);
 }
 
+// ── Tendência INFO-aware ──
+// Meses fechados → valor fixo de INFORMAÇÕES_2026 (base não reduzida).
+// Mês corrente (ainda não preenchido na aba INFO) → contagem ao vivo da aba do exame.
+function infoMonthIdxFor(row) {
+  const mes = (row[COLS.INFO.mes] || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  for (let m = 0; m < 12; m++) {
+    const nome = MONTHS[m].toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').substring(0, 3);
+    if (mes.includes(nome)) return m;
+  }
+  return -1;
+}
+
+function infoTrendArr(filledRows, infoColIdx, liveData, dateCol) {
+  const byMonth = {};
+  (filledRows || []).forEach(r => {
+    const m = infoMonthIdxFor(r);
+    if (m >= 0) byMonth[m] = parseIntBR(r[infoColIdx]);
+  });
+  const arr = [];
+  for (let m = 0; m <= selMonth; m++) {
+    if (Object.prototype.hasOwnProperty.call(byMonth, m)) {
+      arr.push(byMonth[m]);                               // mês fechado: número fixo INFO
+    } else {
+      arr.push((liveData || []).filter(r => {             // mês corrente: contagem ao vivo
+        const d = parseDate(r[dateCol]);
+        return d && d.getMonth() === m && d.getFullYear() === 2026;
+      }).length);
+    }
+  }
+  return arr;
+}
+
+function infoTrendBars(filledRows, infoColIdx, liveData, dateCol) {
+  return infoTrendArr(filledRows, infoColIdx, liveData, dateCol)
+    .map((v, m) => ({ label: MONTHS_SHORT[m], value: v, current: m === selMonth }));
+}
+
 function sparkHTML(bars) {
   if (!bars.length) return '';
   const mx = Math.max(...bars.map(b => b.value), 1);
