@@ -141,7 +141,7 @@ function cmpHTML(cur, prev, invert = false) {
   const up = invert ? p < 0 : p > 0;
   const dn = invert ? p > 0 : p < 0;
   const cls = up ? 'up' : dn ? 'down' : 'neutral';
-  const ar  = up ? '↑' : dn ? '↓' : '→';
+  const ar  = p > 0 ? '↑' : p < 0 ? '↓' : '→'; // seta = direção do valor; cor = qualidade
   const ref = viewMode === 'week' ? 'semana ant.' : `${getPrevMonthLabel()} (prop.)`;
   return `<div class="cmp ${cls}">${ar} ${Math.abs(p).toFixed(1)}% vs ${ref}</div>`;
 }
