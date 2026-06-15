@@ -5,7 +5,7 @@
 // ── Proxy de dados (Google Apps Script) ──────────────────────────
 // Substitui a planilha pública. A planilha pode ficar privada.
 // PROXY_URL: cole aqui a URL gerada após implantar apps-script/proxy.gs
-const PROXY_URL = 'COLE_AQUI_A_URL_DO_APPS_SCRIPT';
+const PROXY_URL = 'https://script.google.com/macros/s/AKfycbzvUhuGOhBjRu74swBBS5sjgjQO5s0WFXIunxG9n9JlMLe8TQhjkt9YiKVEEHltG2U/exec';
 const PROXY_KEY = '51e1f9023eb17a43fc50769d096428d75eb6241831827f3d';
 const CSV_BASE  = PROXY_URL + '?key=' + PROXY_KEY + '&gid=';
 
