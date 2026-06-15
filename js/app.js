@@ -5,6 +5,9 @@
 let currentTab = 'GERAL';
 let examFilter = { HOLTER:'all', MAPA:'all', ECG:'all' };
 
+// Autenticação delegada ao Cloudflare Access — inicializa direto ao carregar
+window.addEventListener('DOMContentLoaded', () => initApp());
+
 function initApp() {
   const now = new Date();
   selMonth = now.getMonth();

@@ -11,25 +11,9 @@
 </head>
 <body>
 
-<!-- ─── AUTH OVERLAY ─── -->
-<div id="authOverlay">
-  <div class="auth-card">
-    <div class="auth-logo">ECGNow</div>
-    <div class="auth-title">Painel de Gestores</div>
-    <div class="auth-sub">Acesso restrito à liderança</div>
-    <form id="authForm" onsubmit="handleAuthSubmit(event)">
-      <div class="auth-field">
-        <label class="auth-label">Senha de acesso</label>
-        <input type="password" id="authInput" class="auth-input" placeholder="Digite a senha" autocomplete="current-password">
-      </div>
-      <div id="authError" class="auth-error" style="display:none">Senha incorreta. Tente novamente.</div>
-      <button type="submit" class="auth-btn">Entrar</button>
-    </form>
-  </div>
-</div>
-
 <!-- ─── APP ─── -->
-<div id="appContent" style="display:none">
+<!-- Autenticação via Cloudflare Access (Zero Trust) — senha local removida -->
+<div id="appContent">
 
   <header class="header">
     <div class="header-left">
@@ -53,7 +37,7 @@
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
         Atualizar
       </button>
-      <button class="hdr-btn hdr-btn-logout" onclick="logout()">Sair</button>
+      <button class="hdr-btn hdr-btn-logout" onclick="location.href='https://painel-gestores.mayara-silva.workers.dev/.cloudflare/access/logout'">Sair</button>
     </div>
   </header>
 
@@ -77,7 +61,6 @@
 <script src="js/utils.js"></script>
 <script src="js/charts.js"></script>
 <script src="js/scorecard.js"></script>
-<script src="js/auth.js"></script>
 <script src="js/renders/geral.js"></script>
 <script src="js/renders/producao.js"></script>
 <script src="js/renders/repeticao.js"></script>

@@ -6,7 +6,7 @@
 // Substitui a planilha pública. A planilha pode ficar privada.
 // PROXY_URL: cole aqui a URL gerada após implantar apps-script/proxy.gs
 const PROXY_URL = 'https://script.google.com/macros/s/AKfycbzvUhuGOhBjRu74swBBS5sjgjQO5s0WFXIunxG9n9JlMLe8TQhjkt9YiKVEEHltG2U/exec';
-const PROXY_KEY = '51e1f9023eb17a43fc50769d096428d75eb6241831827f3d';
+const PROXY_KEY = '2af3fade27b2202bbba40b596969e353522d17f80636864b';
 const CSV_BASE  = PROXY_URL + '?key=' + PROXY_KEY + '&gid=';
 
 const CSV_GIDS = {
@@ -45,14 +45,11 @@ const SECTOR_EMOJIS = {
 
 const TRIM_COLORS = { T1:'var(--cyan)', T2:'var(--amber)', T3:'var(--green)', T4:'var(--purple)' };
 
+// Autenticação via Cloudflare Access — AUTH_HASH removido (senha local descontinuada)
+
 // Impostos Lucro Presumido sobre receita de serviços
 const IMPOSTOS_RECEITA  = { PIS:0.0065, COFINS:0.03, CSLL:0.0288, IR:0.048 };
 const TOTAL_IMPOSTOS    = Object.values(IMPOSTOS_RECEITA).reduce((a,b) => a+b, 0); // ~10.53%
 const CATS_DESCONTO_20  = ['1.2 Pacote de laudos'];
 const CATS_SAAS_DESCONTO= ['3.1 Licença de uso'];
 
-// Hash SHA-256 da senha de acesso (a senha real NUNCA deve ser escrita aqui).
-// Para trocar a senha: no console do navegador, execute:
-//   sha256hash('SUA_NOVA_SENHA').then(h => console.log(h))
-// Cole o hash resultante abaixo.
-const AUTH_HASH = '6d4d1066c45ddbad19d6c7a0c257975cc1c4a65d444e3f62e1b9a6844c6222a1';
