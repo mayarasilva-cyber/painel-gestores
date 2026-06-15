@@ -33,17 +33,15 @@ async function renderGeral() {
   const totP    = hPrev.length + mPrev.length + ePrev.length;
   const totPConc= hPrevConc.length + mPrevConc.length + ePrevConc.length;
 
-  // Taxa de repetição
+  // Taxa de repetição — denominador = total Holter solicitados (mesma data que REPETICAO usa)
   const repAll  = filterPeriod(rR.data, cr.date);
   const repFin  = repAll.filter(r => (r[cr.modalidade]||'').trim() === 'Finalizado').length;
   const repRep  = repAll.filter(r => (r[cr.modalidade]||'').trim() === 'Repetição').length;
   const repT    = repFin + repRep;
-  const repPct  = repT > 0 ? (repRep/repT*100) : 0;
+  const repPct  = hRows.length > 0 ? (repRep / hRows.length * 100) : (repT > 0 ? repRep/repT*100 : 0);
   const repPrev = filterPrevPeriod(rR.data, cr.date);
-  const rpFin   = repPrev.filter(r => (r[cr.modalidade]||'').trim() === 'Finalizado').length;
   const rpRep   = repPrev.filter(r => (r[cr.modalidade]||'').trim() === 'Repetição').length;
-  const rpT     = rpFin + rpRep;
-  const rpPct   = rpT > 0 ? (rpRep/rpT*100) : 0;
+  const rpPct   = hPrev.length > 0 ? (rpRep / hPrev.length * 100) : 0;
 
   // Financeiro do mês (via INFO_2026 se disponível, senão via FINANCEIRO bruto)
   const ci = COLS.INFO;
@@ -132,7 +130,7 @@ async function renderGeral() {
       <div class="kpi-card">
         <div class="kpi-label">Taxa de Repetição</div>
         <div class="kpi-value" style="font-size:28px;color:${repPct>3?'var(--red)':'var(--green)'}">${fmtPct(repPct)}</div>
-        <div class="kpi-sub">${fmtNum(repRep)} de ${fmtNum(repT)} exames</div>
+        <div class="kpi-sub">${fmtNum(repRep)} de ${fmtNum(hRows.length)} holters</div>
         ${cmpHTML(repPct, rpPct, true)}
       </div>
     </div>
