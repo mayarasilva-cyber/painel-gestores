@@ -60,6 +60,24 @@ async function renderProducao() {
   const tot26arr = hol26arr.map((v,i) => v + (map26arr[i]||0) + (ecg26arr[i]||0));
   const tot25arr = hol25arr.map((v,i) => v + (map25arr[i]||0) + (ecg25arr[i]||0) + (te25arr[i]||0));
 
+  // ── Comparativo proporcional via INFO_2026 ────────────────────────────────
+  // Os dados brutos (HOLTER/MAPA/ECG) não contêm o histórico completo de meses
+  // fechados — o total oficial fica em INFO_2026. Aplicamos um fator proporcional
+  // (dias corridos no mês atual / dias totais do mês anterior) para uma comparação
+  // justa entre o parcial atual e o equivalente do mês anterior.
+  const _now = new Date();
+  const _isCurrentMonth = selYear === _now.getFullYear() && selMonth === _now.getMonth();
+  const _daysElapsed    = _isCurrentMonth ? _now.getDate() - 1 : new Date(selYear, selMonth + 1, 0).getDate();
+  let _pm = selMonth - 1, _py = selYear; if (_pm < 0) { _pm = 11; _py--; }
+  const _daysInPrevMonth = new Date(_py, _pm + 1, 0).getDate();
+  const _propFactor      = _daysInPrevMonth > 0 ? _daysElapsed / _daysInPrevMonth : 1;
+
+  const _info26Prev   = i26R.data.find(r => matchInfoMonth(r, _pm));
+  const hol26PrevProp = _info26Prev ? Math.round(parseIntBR(_info26Prev[ci.holter]) * _propFactor) : hPrevConc.length;
+  const map26PrevProp = _info26Prev ? Math.round(parseIntBR(_info26Prev[ci.mapa])   * _propFactor) : mPrevConc.length;
+  const ecg26PrevProp = _info26Prev ? Math.round(parseIntBR(_info26Prev[ci.ecg])    * _propFactor) : ePrevConc.length;
+  const tot26PrevProp = hol26PrevProp + map26PrevProp + ecg26PrevProp;
+
   document.getElementById('mainContent').innerHTML = `
     <div class="section-bar">
       <div>
@@ -74,37 +92,37 @@ async function renderProducao() {
         <div class="kpi-label">Exames Concluídos</div>
         <div class="kpi-value">${fmtNum(tot26Conc)}</div>
         <div class="kpi-sub">📋 Solicitados: <strong>${fmtNum(tot26)}</strong></div>
-        ${cmpHTML(tot26Conc, tot26PConc)}
+        ${cmpHTML(tot26Conc, tot26PrevProp)}
         ${yoyCmpHTML(tot26Conc, tot25m)}
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Holter</div>
         <div class="kpi-value">${fmtNum(hConc.length)}</div>
         <div class="kpi-sub">Solic.: ${fmtNum(hRows.length)} · SAAS: ${fmtNum(hRows.filter(r=>isSaas(r[ch.central])).length)}</div>
-        ${cmpHTML(hConc.length, hPrevConc.length)}
+        ${cmpHTML(hConc.length, hol26PrevProp)}
         ${yoyCmpHTML(hConc.length, hol25m)}
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Mapa</div>
         <div class="kpi-value">${fmtNum(mConc.length)}</div>
         <div class="kpi-sub">Solic.: ${fmtNum(mRows.length)} · SAAS: ${fmtNum(mRows.filter(r=>isSaas(r[cm.central])).length)}</div>
-        ${cmpHTML(mConc.length, mPrevConc.length)}
+        ${cmpHTML(mConc.length, map26PrevProp)}
         ${yoyCmpHTML(mConc.length, map25m)}
       </div>
       <div class="kpi-card">
         <div class="kpi-label">ECG</div>
         <div class="kpi-value">${fmtNum(eConc.length)}</div>
         <div class="kpi-sub">Solic.: ${fmtNum(eRows.length)} · SAAS: ${fmtNum(eRows.filter(r=>isSaas(r[ce.central])).length)}</div>
-        ${cmpHTML(eConc.length, ePrevConc.length)}
+        ${cmpHTML(eConc.length, ecg26PrevProp)}
         ${yoyCmpHTML(eConc.length, ecg25m)}
       </div>
     </div>
 
     <!-- Cards de detalhe por modalidade -->
     <div class="mod-grid">
-      ${producaoModCard('HOLTER','📊','Holter', hRows, hPrev, ch, hR.data, hConc, filled26, ci.holter)}
-      ${producaoModCard('MAPA','🩺','Mapa', mRows, mPrev, cm, mR.data, mConc, filled26, ci.mapa)}
-      ${producaoModCard('ECG','❤️','ECG', eRows, ePrev, ce, eR.data, eConc, filled26, ci.ecg)}
+      ${producaoModCard('HOLTER','📊','Holter', hRows, hPrev, ch, hR.data, hConc, filled26, ci.holter, hol26PrevProp)}
+      ${producaoModCard('MAPA','🩺','Mapa', mRows, mPrev, cm, mR.data, mConc, filled26, ci.mapa, map26PrevProp)}
+      ${producaoModCard('ECG','❤️','ECG', eRows, ePrev, ce, eR.data, eConc, filled26, ci.ecg, ecg26PrevProp)}
     </div>
 
     <!-- YoY por modalidade -->
@@ -153,12 +171,14 @@ function matchInfoMonth(row, month) {
   return mes.includes(nome);
 }
 
-function producaoModCard(tab, emoji, name, rows, prev, c, allData, concRows, filled26, infoCol) {
+function producaoModCard(tab, emoji, name, rows, prev, c, allData, concRows, filled26, infoCol, prevConcProp) {
   const saas    = rows.filter(r => isSaas(r[c.central]));
   const em      = rows.filter(r => (r[c.emerg]||'').toLowerCase() === 'sim').length;
   const avgT    = avgSecs(rows, c.tempo);
   const avgPrev = avgSecs(prev, c.tempo);
   const conc    = concRows ? concRows.length : null;
+  // Usa o valor proporcional via INFO_2026 quando disponível (dados brutos históricos incompletos)
+  const cmpBase = prevConcProp !== undefined ? prevConcProp : prev.length;
 
   return `<div class="mod-card">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
@@ -170,7 +190,7 @@ function producaoModCard(tab, emoji, name, rows, prev, c, allData, concRows, fil
         <div class="kpi-label">Concluídos</div>
         <div class="kpi-value" style="font-size:28px">${conc !== null ? fmtNum(conc) : fmtNum(rows.length)}</div>
         <div class="kpi-sub" style="font-size:11px">Solic.: ${fmtNum(rows.length)}</div>
-        ${cmpHTML(rows.length, prev.length)}
+        ${cmpHTML(conc !== null ? conc : rows.length, cmpBase)}
       </div>
       <div>
         <div class="kpi-label">Média Laudo</div>
