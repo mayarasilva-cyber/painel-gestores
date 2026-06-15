@@ -2,7 +2,12 @@
 //  CONFIG — Painel Gestores ECGNow
 // ═══════════════════════════════════════════════
 
-const CSV_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTcbbHtFlaA3tt8Mv1NF22YPbetZRLM9chO6G1gqWSpO2RSPQu_7Gzi_V4RINu_CYG-tGCQI4evg3RF/pub?single=true&output=csv&gid=';
+// ── Proxy de dados (Google Apps Script) ──────────────────────────
+// Substitui a planilha pública. A planilha pode ficar privada.
+// PROXY_URL: cole aqui a URL gerada após implantar apps-script/proxy.gs
+const PROXY_URL = 'COLE_AQUI_A_URL_DO_APPS_SCRIPT';
+const PROXY_KEY = '51e1f9023eb17a43fc50769d096428d75eb6241831827f3d';
+const CSV_BASE  = PROXY_URL + '?key=' + PROXY_KEY + '&gid=';
 
 const CSV_GIDS = {
   HOLTER:        '0',

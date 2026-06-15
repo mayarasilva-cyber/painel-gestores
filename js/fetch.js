@@ -68,9 +68,9 @@ async function fetchData(key) {
   const r = await fetch(CSV_BASE + gid);
   if (!r.ok) throw new Error(`HTTP ${r.status} – ${key}`);
   const t = await r.text();
-  if (t.trim().startsWith('<!') || t.trim().startsWith('<html')) {
-    // Rate limit ou aba não publicada: NÃO cacheia para permitir retry
-    console.warn(`${key}: resposta HTML – possível rate limit, não cacheado`);
+  if (!t.trim() || t.trim().startsWith('<!') || t.trim().startsWith('<html') || t.trim().startsWith('{')) {
+    // Resposta inválida (HTML de rate-limit, erro JSON do proxy, ou vazio): não cacheia
+    console.warn(`${key}: resposta inválida do proxy – ${t.trim().substring(0, 80)}`);
     return { data: [] };
   }
   const lines = t.split('\n').filter(l => l.trim()), rows = [];
