@@ -41,7 +41,21 @@ async function renderGeral() {
   const repPct  = hRows.length > 0 ? (repRep / hRows.length * 100) : (repT > 0 ? repRep/repT*100 : 0);
   const repPrev = filterPrevPeriod(rR.data, cr.date);
   const rpRep   = repPrev.filter(r => (r[cr.modalidade]||'').trim() === 'Repetição').length;
-  const rpPct   = hPrev.length > 0 ? (rpRep / hPrev.length * 100) : 0;
+  // Denominador do mês anterior via INFO_2026 com fator proporcional (tabela bruta incompleta)
+  const rpPct = (() => {
+    const _ci = COLS.INFO;
+    const _now = new Date();
+    const _isCurrentMonth = selYear === _now.getFullYear() && selMonth === _now.getMonth();
+    const _daysElapsed = _isCurrentMonth ? _now.getDate() - 1 : new Date(selYear, selMonth + 1, 0).getDate();
+    let _pm = selMonth - 1, _py = selYear; if (_pm < 0) { _pm = 11; _py--; }
+    const _daysInPrevMonth = new Date(_py, _pm + 1, 0).getDate();
+    const _propFactor = _daysInPrevMonth > 0 ? _daysElapsed / _daysInPrevMonth : 1;
+    const _info26Prev = i26R.data.find(r => matchInfoMonth(r, _pm));
+    const _holterPrevProp = _info26Prev
+      ? Math.round(parseIntBR(_info26Prev[_ci.holter]) * _propFactor)
+      : hPrev.length;
+    return _holterPrevProp > 0 ? (rpRep / _holterPrevProp * 100) : 0;
+  })();
 
   // Financeiro do mês (via INFO_2026 se disponível, senão via FINANCEIRO bruto)
   const ci = COLS.INFO;
@@ -147,7 +161,7 @@ async function renderGeral() {
       <div class="overview-sector" onclick="switchTab('REPETICAO')" style="cursor:pointer">
         <div class="sector-header"><span class="sector-emoji">🔁</span><span class="sector-name">Repetição</span></div>
         <div class="sector-kpis">
-          <div><div class="sector-kpi-label">Finalizados</div><div class="sector-kpi-val">${fmtNum(repFin)}</div></div>
+          <div><div class="sector-kpi-label">Holter Solic.</div><div class="sector-kpi-val">${fmtNum(hRows.length)}</div></div>
           <div><div class="sector-kpi-label">Repetições</div><div class="sector-kpi-val" style="color:var(--red)">${fmtNum(repRep)}</div><div class="sector-kpi-sub">${fmtPct(repPct)}</div></div>
         </div>
       </div>

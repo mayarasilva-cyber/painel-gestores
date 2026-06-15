@@ -3,9 +3,10 @@
 // ═══════════════════════════════════════════════
 
 async function renderRepeticao() {
-  const [{ data }, hR] = await Promise.all([
+  const [{ data }, hR, i26R] = await Promise.all([
     fetchData('REPETICAO'),
     getHolterMerged(),
+    fetchData('INFO_2026'),
   ]);
   const c  = COLS.REPETICAO;
   const ch = COLS.HOLTER;
@@ -25,9 +26,21 @@ async function renderRepeticao() {
   const pRep = prevAll.filter(r => (r[c.modalidade]||'').trim() === 'Repetição').length;
   const pTot = pFin + pRep;
 
-  // Denominador do mês anterior proporcional via HOLTER
-  const holterPrevTotal = filterPrevPeriod(hR.data, ch.dateSolic).length;
-  const pPct = holterPrevTotal > 0 ? (pRep / holterPrevTotal * 100) : (pTot > 0 ? pRep/pTot*100 : 0);
+  // Denominador do mês anterior via INFO_2026 com fator proporcional (tabela bruta incompleta)
+  const pPct = (() => {
+    const _ci = COLS.INFO;
+    const _now2 = new Date();
+    const _isCurrentMonth = selYear === _now2.getFullYear() && selMonth === _now2.getMonth();
+    const _daysElapsed = _isCurrentMonth ? _now2.getDate() - 1 : new Date(selYear, selMonth + 1, 0).getDate();
+    let _pm = selMonth - 1, _py = selYear; if (_pm < 0) { _pm = 11; _py--; }
+    const _daysInPrevMonth = new Date(_py, _pm + 1, 0).getDate();
+    const _propFactor = _daysInPrevMonth > 0 ? _daysElapsed / _daysInPrevMonth : 1;
+    const _info26Prev = i26R.data.find(r => matchInfoMonth(r, _pm));
+    const _holterPrevProp = _info26Prev
+      ? Math.round(parseIntBR(_info26Prev[_ci.holter]) * _propFactor)
+      : filterPrevPeriod(hR.data, ch.dateSolic).length;
+    return _holterPrevProp > 0 ? (pRep / _holterPrevProp * 100) : (pTot > 0 ? pRep/pTot*100 : 0);
+  })();
 
   // SAAS vs TD
   // Classifica pelo campo saaslaudo; se vazio, usa prefixo [Saas] no nome da central
