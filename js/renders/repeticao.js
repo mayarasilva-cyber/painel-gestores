@@ -3,21 +3,31 @@
 // ═══════════════════════════════════════════════
 
 async function renderRepeticao() {
-  const { data } = await fetchData('REPETICAO');
-  const c = COLS.REPETICAO;
+  const [{ data }, hR] = await Promise.all([
+    fetchData('REPETICAO'),
+    getHolterMerged(),
+  ]);
+  const c  = COLS.REPETICAO;
+  const ch = COLS.HOLTER;
 
   const all     = filterPeriod(data, c.date);
   const prevAll = filterPrevPeriod(data, c.date);
 
   const fin  = all.filter(r => (r[c.modalidade]||'').trim() === 'Finalizado').length;
   const rep  = all.filter(r => (r[c.modalidade]||'').trim() === 'Repetição').length;
-  const tot  = fin + rep;
-  const pct  = tot > 0 ? (rep/tot*100) : 0;
+  const tot  = fin + rep;   // exames já processados no sistema de QA
+
+  // Denominador real: total de Holter solicitados no período (mesma coluna de data que a planilha de Repetição usa)
+  const holterTotal = filterPeriod(hR.data, ch.dateSolic).length;
+  const pct  = holterTotal > 0 ? (rep / holterTotal * 100) : (tot > 0 ? rep/tot*100 : 0);
 
   const pFin = prevAll.filter(r => (r[c.modalidade]||'').trim() === 'Finalizado').length;
   const pRep = prevAll.filter(r => (r[c.modalidade]||'').trim() === 'Repetição').length;
   const pTot = pFin + pRep;
-  const pPct = pTot > 0 ? (pRep/pTot*100) : 0;
+
+  // Denominador do mês anterior proporcional via HOLTER
+  const holterPrevTotal = filterPrevPeriod(hR.data, ch.dateSolic).length;
+  const pPct = holterPrevTotal > 0 ? (pRep / holterPrevTotal * 100) : (pTot > 0 ? pRep/pTot*100 : 0);
 
   // SAAS vs TD
   // Classifica pelo campo saaslaudo; se vazio, usa prefixo [Saas] no nome da central
@@ -99,14 +109,14 @@ async function renderRepeticao() {
       </div>
       <div class="rep-stats">
         <div>
-          <div class="rep-stat-label">Finalizados</div>
-          <div class="rep-stat-val">${fmtNum(fin)}</div>
-          <div class="rep-stat-sub">exames concluídos</div>
+          <div class="rep-stat-label">Holter Solicitados</div>
+          <div class="rep-stat-val">${fmtNum(holterTotal)}</div>
+          <div class="rep-stat-sub">${fmtNum(tot)} já processados no QA</div>
         </div>
         <div>
           <div class="rep-stat-label">Repetições</div>
           <div class="rep-stat-val" style="color:var(--red)">${fmtNum(rep)}</div>
-          <div class="rep-stat-sub">${fmtPct(pct)} do total</div>
+          <div class="rep-stat-sub">${fmtPct(pct)} do total solicitado</div>
           ${cmpHTML(pct, pPct, true)}
         </div>
         <div>
