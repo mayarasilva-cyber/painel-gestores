@@ -45,10 +45,12 @@ function doGet(e) {
         .setMimeType(ContentService.MimeType.TEXT);
     }
 
-    const values = sheet.getDataRange().getValues();
+    // getDisplayValues() retorna o texto visível da célula (igual ao CSV exportado),
+    // evitando que datas virem objetos Date e números percam a formatação.
+    const values = sheet.getDataRange().getDisplayValues();
     const csv = values.map(row =>
       row.map(cell => {
-        const s = String(cell == null ? '' : cell);
+        const s = cell == null ? '' : cell;
         return (s.includes(',') || s.includes('"') || s.includes('\n'))
           ? '"' + s.replace(/"/g, '""') + '"'
           : s;
