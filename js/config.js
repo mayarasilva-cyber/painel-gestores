@@ -46,9 +46,8 @@ const TOTAL_IMPOSTOS    = Object.values(IMPOSTOS_RECEITA).reduce((a,b) => a+b, 0
 const CATS_DESCONTO_20  = ['1.2 Pacote de laudos'];
 const CATS_SAAS_DESCONTO= ['3.1 Licença de uso'];
 
-// Hash SHA-256 da senha de acesso (a senha real não fica exposta no código).
+// Hash SHA-256 da senha de acesso (a senha real NUNCA deve ser escrita aqui).
 // Para trocar a senha: no console do navegador, execute:
 //   sha256hash('SUA_NOVA_SENHA').then(h => console.log(h))
-// Cole o resultado abaixo.
-// Hash atual corresponde à senha: Ecgn0w2029*
+// Cole o hash resultante abaixo.
 const AUTH_HASH = 'ca4f56454b5302f5c2c12e0158db4e52db7a17bf2b7183fe528fb5dd6ce6b858';
