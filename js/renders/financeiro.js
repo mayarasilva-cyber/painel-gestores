@@ -57,7 +57,6 @@ async function renderFinanceiro() {
   };
 
   const inadimTotal = inadimRows.reduce((s,r) => s + parseNum(r[cf.valorPrev]), 0);
-  const inadimPct   = faturamento > 0 ? (inadimTotal/faturamento*100) : 0;
 
   // Realização % (realizado / previsto)
   const proj = fR.data.filter(r => { const d = parseDate(r[cf.dataPrev]); return d && d.getMonth()===selMonth && d.getFullYear()===selYear; });
@@ -65,6 +64,36 @@ async function renderFinanceiro() {
   const recProj = receitaLiquida(proj, cf, cf.valorPrev);
   const recReal = receitaLiquida(real, cf, cf.valorReal);
   const realizPct = recProj.bruta > 0 ? (recReal.bruta/recProj.bruta*100) : 0;
+
+  // Inadimplência sobre faturamento fechado, ou sobre receita prevista no mês aberto
+  const inadimBase  = faturamento || recProj.bruta;
+  const inadimPct   = inadimBase > 0 ? (inadimTotal/inadimBase*100) : 0;
+
+  // ── MODO MÊS EM ANDAMENTO ──────────────────────────────────────
+  // Quando o INFO ainda não foi fechado (faturamento=0), montamos uma
+  // prévia financeira ao vivo a partir do contas-a-receber/pagar.
+  const liveMode = !faturamento;
+  const isSai    = r => { const t=(r[cf.tipo]||'').toLowerCase(); return t==='saída'||t==='saida'; };
+  const isRealiz = r => (r[cf.status]||'').toLowerCase().includes('realizado');
+  const saidasMes  = proj.filter(isSai);
+
+  const recPrevBruta = recProj.bruta;                                          // entradas previstas (bruto)
+  const recRealBruta = recReal.bruta;                                          // entradas já recebidas
+  const despPrev = saidasMes.reduce((s,r)=>s+parseNum(r[cf.valorPrev]),0);     // saídas previstas
+  const despReal = saidasMes.filter(isRealiz).reduce((s,r)=>s+parseNum(r[cf.valorReal]),0); // saídas pagas
+  const resultPrev = recPrevBruta - despPrev;                                  // resultado previsto (caixa)
+  const caixaMes   = recRealBruta - despReal;                                  // caixa gerado até agora
+  const aReceber   = Math.max(recPrevBruta - recRealBruta, 0);
+  const aPagar     = Math.max(despPrev - despReal, 0);
+  const recPctReal = recPrevBruta>0 ? recRealBruta/recPrevBruta*100 : 0;
+  const despPctReal= despPrev>0 ? despReal/despPrev*100 : 0;
+
+  // Despesas previstas por categoria (substitui margem-modalidade quando sem FATURAMENTO)
+  const catsSaiObj = {};
+  saidasMes.forEach(r => { const c=(r[cf.categoria]||'').trim(); if(c&&c!=='-') catsSaiObj[c]=(catsSaiObj[c]||0)+parseNum(r[cf.valorPrev]); });
+  const topSai   = Object.entries(catsSaiObj).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const mxSai    = topSai[0]?.[1] || 1;
+  const totalSai = Object.values(catsSaiObj).reduce((s,v)=>s+v,0);
 
   // Receita por banco
   const bancos = {};
@@ -148,16 +177,42 @@ async function renderFinanceiro() {
   const ebit25arr = filled25.map(r => parsePct(r[ci.ebitda]));
   const ebit26arr = filled26.map(r => parsePct(r[ci.ebitda]));
 
-  document.getElementById('mainContent').innerHTML = `
-    <div class="section-bar">
-      <div>
-        <div class="section-title">💰 Financeiro</div>
-        <div class="section-sub">${pLabel()}</div>
-        ${infoRow26 ? '' : '<div class="section-note">⚠️ Dados do mês ainda não disponíveis em INFORMAÇÕES_2026</div>'}
+  // ── Cards condicionais (mês fechado × mês em andamento) ──────────
+  const kpiGridHTML = liveMode ? `
+    <div class="fin-grid">
+      <div class="fin-card fin-receita">
+        <div class="fin-label">Faturamento Previsto</div>
+        <div class="fin-value">${fmtCurrK(recPrevBruta)}</div>
+        <div class="fin-sub">entradas previstas no mês</div>
+        ${yoyCmpHTML(recPrevBruta, fat25)}
+        <div class="fin-progress" style="margin-top:12px">
+          <div class="fin-progress-label">Recebido: ${fmtPct(recPctReal)}</div>
+          <div class="fin-progress-bar"><div class="fin-progress-fill" style="width:${Math.min(recPctReal,100).toFixed(0)}%"></div></div>
+          <div class="fin-progress-label">${fmtCurrK(recRealBruta)} recebido de ${fmtCurrK(recPrevBruta)} previsto</div>
+        </div>
       </div>
-    </div>
-
-    <!-- KPIs principais -->
+      <div class="fin-card fin-despesa">
+        <div class="fin-label">Despesas Previstas</div>
+        <div class="fin-value">${fmtCurrK(despPrev)}</div>
+        <div class="fin-sub">saídas previstas no mês</div>
+        <div class="fin-progress" style="margin-top:12px">
+          <div class="fin-progress-label">Pago: ${fmtPct(despPctReal)}</div>
+          <div class="fin-progress-bar"><div class="fin-progress-fill" style="width:${Math.min(despPctReal,100).toFixed(0)}%"></div></div>
+          <div class="fin-progress-label">${fmtCurrK(despReal)} pago de ${fmtCurrK(despPrev)} previsto</div>
+        </div>
+      </div>
+      <div class="fin-card fin-margem">
+        <div class="fin-label">Resultado Previsto</div>
+        <div class="fin-value" style="color:${resultPrev>=0?'var(--green)':'var(--red)'}">${fmtCurrK(resultPrev)}</div>
+        <div class="fin-sub">entradas − saídas previstas</div>
+        <div class="fin-sub" style="margin-top:4px">caixa gerado: <b style="color:${caixaMes>=0?'var(--green)':'var(--red)'}">${fmtCurrK(caixaMes)}</b></div>
+      </div>
+      <div class="fin-card fin-inadim">
+        <div class="fin-label">Inadimplência</div>
+        <div class="fin-value">${fmtCurrK(inadimTotal)}</div>
+        <div class="fin-sub">${fmtPct(inadimPct)} da receita prevista · ${inadimRows.length} recebíveis</div>
+      </div>
+    </div>` : `
     <div class="fin-grid">
       <div class="fin-card fin-receita">
         <div class="fin-label">Faturamento Bruto</div>
@@ -187,7 +242,67 @@ async function renderFinanceiro() {
         <div class="fin-value">${fmtCurrK(inadimTotal)}</div>
         <div class="fin-sub">${fmtPct(inadimPct)} do faturamento · ${inadimRows.length} recebíveis</div>
       </div>
+    </div>`;
+
+  // Card superior-esquerdo: Margem por Modalidade (fechado) × Despesas por Categoria (aberto)
+  const leftTopCard = (liveMode || !hasFatData) ? `
+      <div class="card">
+        <div class="card-title">📉 Despesas por Categoria <span style="font-size:11px;font-weight:400;color:var(--text-soft)">previstas no mês</span></div>
+        ${!topSai.length ? '<p class="no-data">Sem despesas previstas para ' + MONTHS[selMonth] + '/' + selYear + '</p>' : `
+        <table>
+          <thead><tr><th>Categoria</th><th style="width:80px"></th><th style="text-align:right">Previsto</th><th style="text-align:right;padding-left:6px">%</th></tr></thead>
+          <tbody>${topSai.map(([n,v]) => `<tr>
+            <td class="td-name" title="${esc(n)}">${esc(n)}</td>
+            <td class="td-bar"><div class="bar-bg"><div class="bar-fill" style="width:${(v/mxSai*100).toFixed(0)}%;background:var(--red)"></div></div></td>
+            <td class="td-curr">${fmtCurrK(v)}</td>
+            <td class="td-pct">${totalSai>0?((v/totalSai)*100).toFixed(1):0}%</td>
+          </tr>`).join('')}</tbody>
+        </table>`}
+      </div>` : `
+      <div class="card">
+        <div class="card-title">📐 Margem por Modalidade
+          <span style="font-size:11px;font-weight:400;color:var(--text-soft)">dados reais de faturamento</span>
+        </div>
+        ${margemItens.length ? margemModHTML(margemItens) : '<p class="no-data">Sem dados de faturamento para ' + MONTHS[selMonth] + '/' + selYear + '</p>'}
+      </div>`;
+
+  // Card inferior-direito: Resultado DRE (fechado) × Fluxo de Caixa (aberto)
+  const resultadoCard = liveMode ? `
+      <div class="card">
+        <div class="card-title">📊 Fluxo de Caixa — ${pLabel()}</div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px">
+          ${resultRow('Entradas recebidas', recRealBruta, 'var(--green)')}
+          ${resultRow('(-) Saídas pagas', -despReal, 'var(--red)')}
+          ${fmtResultDivider('= Caixa gerado no mês', caixaMes, 0)}
+          ${resultRow('A receber (previsto)', aReceber, 'var(--amber)')}
+          ${resultRow('A pagar (previsto)', aPagar, 'var(--amber)')}
+          ${fmtResultDivider('= Resultado previsto', resultPrev, 0)}
+        </div>
+        <div class="section-note" style="margin-top:12px">Prévia ao vivo do contas a pagar/receber. Os indicadores fechados (margem, EBITDA, lucro) entram ao consolidar o mês.</div>
+      </div>` : `
+      <div class="card">
+        <div class="card-title">📊 Resultado — ${pLabel()}</div>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px">
+          ${resultRow('Faturamento', faturamento, 'var(--green)')}
+          ${resultRow('(-) Custo do Serviço', -custo, 'var(--red)')}
+          ${fmtResultDivider('= Margem Bruta', faturamento-custo, margemBruta)}
+          ${resultRow('(-) Despesas Fixas', -despFixas, 'var(--amber)')}
+          ${fmtResultDivider('= EBITDA', faturamento-custo-despFixas, ebitda)}
+          ${lucroLiq !== 0 ? fmtResultDivider('= Lucro Líquido', lucroLiq, 0) : ''}
+        </div>
+      </div>`;
+
+  document.getElementById('mainContent').innerHTML = `
+    <div class="section-bar">
+      <div>
+        <div class="section-title">💰 Financeiro</div>
+        <div class="section-sub">${pLabel()}</div>
+        ${liveMode ? '<div class="section-note">🟢 Mês em andamento — prévia ao vivo do contas a pagar/receber. Indicadores fechados entram ao consolidar o mês.</div>' : ''}
+      </div>
     </div>
+
+    <!-- KPIs principais -->
+    ${kpiGridHTML}
 
     <!-- Aging inadimplência -->
     <div class="section-bar" style="margin-top:4px">
@@ -201,14 +316,9 @@ async function renderFinanceiro() {
       ${agingCard('> 30 dias', aging.mais30, 'var(--red)')}
     </div>
 
-    <!-- Margem por modalidade -->
+    <!-- Margem por modalidade / Despesas por categoria -->
     <div class="two-col">
-      <div class="card">
-        <div class="card-title">📐 Margem por Modalidade
-          <span style="font-size:11px;font-weight:400;color:var(--text-soft)">${hasFatData ? 'dados reais de faturamento' : 'estimativa proporcional'}</span>
-        </div>
-        ${margemItens.length ? margemModHTML(margemItens) : '<p class="no-data">Sem dados de faturamento para ' + MONTHS[selMonth] + '/' + selYear + '</p>'}
-      </div>
+      ${leftTopCard}
 
       <!-- Receita por categoria -->
       <div class="card">
@@ -241,17 +351,7 @@ async function renderFinanceiro() {
         </table>`}
       </div>
 
-      <div class="card">
-        <div class="card-title">📊 Resultado — ${pLabel()}</div>
-        <div style="display:flex;flex-direction:column;gap:14px;margin-top:8px">
-          ${resultRow('Faturamento', faturamento, 'var(--green)')}
-          ${resultRow('(-) Custo do Serviço', -custo, 'var(--red)')}
-          ${fmtResultDivider('= Margem Bruta', faturamento-custo, margemBruta)}
-          ${resultRow('(-) Despesas Fixas', -despFixas, 'var(--amber)')}
-          ${fmtResultDivider('= EBITDA', faturamento-custo-despFixas, ebitda)}
-          ${lucroLiq !== 0 ? fmtResultDivider('= Lucro Líquido', lucroLiq, 0) : ''}
-        </div>
-      </div>
+      ${resultadoCard}
     </div>
 
     <!-- YoY Financeiro -->
