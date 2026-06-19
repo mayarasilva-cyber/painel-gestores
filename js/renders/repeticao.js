@@ -82,14 +82,24 @@ async function renderRepeticao() {
     .slice(0, 8);
   const mxCPct = topCRpct[0]?.pct || 1;
 
-  // Trend mensal: rep / holterSolicitados (mesmo denominador do hero)
+  // Trend mensal: rep / holterSolicitados
+  // Meses fechados → INFO_2026 (holter oficial); mês corrente → planilha ao vivo
+  const ci  = COLS.INFO;
+  const now2 = new Date();
   const trend2026 = (() => {
     const bars = [];
     let m = 0, y = 2026;
     while (y < selYear || (y === selYear && m <= selMonth)) {
       const mm = m, yy = y;
-      const holterM = hR.data.filter(r => { const d = parseDate(r[ch.dateSolic]); return d && d.getMonth()===mm && d.getFullYear()===yy; }).length;
-      const repM    = data.filter(r => { const d = parseDate(r[c.date]); return d && d.getMonth()===mm && d.getFullYear()===yy && (r[c.modalidade]||'').trim()==='Repetição'; }).length;
+      const isCurrent = mm === now2.getMonth() && yy === now2.getFullYear();
+      let holterM;
+      if (isCurrent) {
+        holterM = hR.data.filter(r => { const d = parseDate(r[ch.dateSolic]); return d && d.getMonth()===mm && d.getFullYear()===yy; }).length;
+      } else {
+        const infoRow = i26R.data.find(r => matchInfoMonth(r, mm));
+        holterM = infoRow ? parseIntBR(infoRow[ci.holter]) : 0;
+      }
+      const repM = data.filter(r => { const d = parseDate(r[c.date]); return d && d.getMonth()===mm && d.getFullYear()===yy && (r[c.modalidade]||'').trim()==='Repetição'; }).length;
       const val = holterM > 0 ? parseFloat((repM / holterM * 100).toFixed(2)) : 0;
       bars.push({ label: MONTHS_SHORT[mm], value: val, current: mm === selMonth && yy === selYear });
       m++; if (m > 11) { m = 0; y++; }
