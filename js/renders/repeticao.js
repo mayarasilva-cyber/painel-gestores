@@ -42,27 +42,21 @@ async function renderRepeticao() {
     return _holterPrevProp > 0 ? (pRep / _holterPrevProp * 100) : (pTot > 0 ? pRep/pTot*100 : 0);
   })();
 
-  // SAAS vs TD
-  // Classifica pelo campo saaslaudo; se vazio, usa prefixo [Saas] no nome da central
+  // SAAS vs TD — proporção das repetições (não taxa interna de cada segmento)
   const isSaasRow = r => {
     const sl = (r[c.saaslaudo]||'').trim();
     if (sl === 'SAAS')   return true;
     if (sl === 'Laudos') return false;
     return (r[c.central]||'').trim().toLowerCase().startsWith('[saas]');
   };
-  const saasAll  = all.filter(r => isSaasRow(r));
-  const tdAll    = all.filter(r => !isSaasRow(r));
-  const saasRep  = saasAll.filter(r => (r[c.modalidade]||'').trim() === 'Repetição').length;
-  const saasFin  = saasAll.filter(r => (r[c.modalidade]||'').trim() === 'Finalizado').length;
-  const saasT    = saasRep + saasFin;
-  const saasPct  = saasT > 0 ? (saasRep/saasT*100) : 0;
-  const tdRep    = tdAll.filter(r => (r[c.modalidade]||'').trim() === 'Repetição').length;
-  const tdFin    = tdAll.filter(r => (r[c.modalidade]||'').trim() === 'Finalizado').length;
-  const tdT      = tdRep + tdFin;
-  const tdPct    = tdT > 0 ? (tdRep/tdT*100) : 0;
+  const repRows  = all.filter(r => (r[c.modalidade]||'').trim() === 'Repetição');
+  const saasRep  = repRows.filter(r => isSaasRow(r)).length;
+  const tdRep    = repRows.filter(r => !isSaasRow(r)).length;
+  // % de cada segmento dentro do total de repetições
+  const saasRepPct = rep > 0 ? (saasRep / rep * 100) : 0;
+  const tdRepPct   = rep > 0 ? (tdRep   / rep * 100) : 0;
 
   // Motivos
-  const repRows = all.filter(r => (r[c.modalidade]||'').trim() === 'Repetição');
   const motMap  = {};
   repRows.forEach(r => { const m = (r[c.motivo]||'').trim(); if (m && m !== '-') motMap[m] = (motMap[m]||0)+1; });
   const topMot  = Object.entries(motMap).sort((a,b) => b[1]-a[1]);
@@ -88,12 +82,20 @@ async function renderRepeticao() {
     .slice(0, 8);
   const mxCPct = topCRpct[0]?.pct || 1;
 
-  // Trend YoY de repetição
-  const trend2026 = getMonthlyTrend(data, c.date, rows => {
-    const f = rows.filter(r=>(r[c.modalidade]||'').trim()==='Finalizado').length;
-    const r2= rows.filter(r=>(r[c.modalidade]||'').trim()==='Repetição').length;
-    return (f+r2) > 0 ? parseFloat(((r2/(f+r2))*100).toFixed(2)) : 0;
-  });
+  // Trend mensal: rep / holterSolicitados (mesmo denominador do hero)
+  const trend2026 = (() => {
+    const bars = [];
+    let m = 0, y = 2026;
+    while (y < selYear || (y === selYear && m <= selMonth)) {
+      const mm = m, yy = y;
+      const holterM = hR.data.filter(r => { const d = parseDate(r[ch.dateSolic]); return d && d.getMonth()===mm && d.getFullYear()===yy; }).length;
+      const repM    = data.filter(r => { const d = parseDate(r[c.date]); return d && d.getMonth()===mm && d.getFullYear()===yy && (r[c.modalidade]||'').trim()==='Repetição'; }).length;
+      const val = holterM > 0 ? parseFloat((repM / holterM * 100).toFixed(2)) : 0;
+      bars.push({ label: MONTHS_SHORT[mm], value: val, current: mm === selMonth && yy === selYear });
+      m++; if (m > 11) { m = 0; y++; }
+    }
+    return bars;
+  })();
 
   const circ = 2*Math.PI*50;
   const off  = circ - (pct/100)*circ;
@@ -124,7 +126,7 @@ async function renderRepeticao() {
         <div>
           <div class="rep-stat-label">Holter Solicitados</div>
           <div class="rep-stat-val">${fmtNum(holterTotal)}</div>
-          <div class="rep-stat-sub">${fmtNum(tot)} já processados no QA</div>
+          <div class="rep-stat-sub">exames no período</div>
         </div>
         <div>
           <div class="rep-stat-label">Repetições</div>
@@ -134,13 +136,13 @@ async function renderRepeticao() {
         </div>
         <div>
           <div class="rep-stat-label">SAAS</div>
-          <div class="rep-stat-val">${fmtPct(saasPct)}</div>
-          <div class="rep-stat-sub">${fmtNum(saasRep)} rep. / ${fmtNum(saasT)} total</div>
+          <div class="rep-stat-val">${fmtNum(saasRep)}</div>
+          <div class="rep-stat-sub">${fmtPct(saasRepPct)} das repetições</div>
         </div>
         <div>
-          <div class="rep-stat-label">Laudos (TD)</div>
-          <div class="rep-stat-val">${fmtPct(tdPct)}</div>
-          <div class="rep-stat-sub">${fmtNum(tdRep)} rep. / ${fmtNum(tdT)} total</div>
+          <div class="rep-stat-label">TD</div>
+          <div class="rep-stat-val">${fmtNum(tdRep)}</div>
+          <div class="rep-stat-sub">${fmtPct(tdRepPct)} das repetições</div>
         </div>
       </div>
     </div>
