@@ -3,12 +3,13 @@
 // ═══════════════════════════════════════════════
 
 async function renderProducao() {
-  const [hR, mR, eR, i25R, i26R] = await Promise.all([
+  const [hR, mR, eR, i25R, i26R, rR] = await Promise.all([
     getHolterMerged(),
     fetchData('MAPA'),
     fetchData('ECG'),
     fetchData('INFO_2025'),
     fetchData('INFO_2026'),
+    fetchData('REPETICAO'),
   ]);
 
   const ci = COLS.INFO;
@@ -78,6 +79,12 @@ async function renderProducao() {
   const ecg26PrevProp = _info26Prev ? Math.round(parseIntBR(_info26Prev[ci.ecg])    * _propFactor) : ePrevConc.length;
   const tot26PrevProp = hol26PrevProp + map26PrevProp + ecg26PrevProp;
 
+  // Taxa de repetição do Holter no período
+  const cr = COLS.REPETICAO;
+  const repPeriodo = filterPeriod(rR.data, cr.date);
+  const repCount   = repPeriodo.filter(r => (r[cr.modalidade]||'').trim() === 'Repetição').length;
+  const holterRepPct = hRows.length > 0 ? (repCount / hRows.length * 100) : 0;
+
   document.getElementById('mainContent').innerHTML = `
     <div class="section-bar">
       <div>
@@ -120,7 +127,7 @@ async function renderProducao() {
 
     <!-- Cards de detalhe por modalidade -->
     <div class="mod-grid">
-      ${producaoModCard('HOLTER','📊','Holter', hRows, hPrev, ch, hR.data, hConc, filled26, ci.holter, hol26PrevProp)}
+      ${producaoModCard('HOLTER','📊','Holter', hRows, hPrev, ch, hR.data, hConc, filled26, ci.holter, hol26PrevProp, repCount, holterRepPct)}
       ${producaoModCard('MAPA','🩺','Mapa', mRows, mPrev, cm, mR.data, mConc, filled26, ci.mapa, map26PrevProp)}
       ${producaoModCard('ECG','❤️','ECG', eRows, ePrev, ce, eR.data, eConc, filled26, ci.ecg, ecg26PrevProp)}
     </div>
@@ -171,14 +178,14 @@ function matchInfoMonth(row, month) {
   return mes.includes(nome);
 }
 
-function producaoModCard(tab, emoji, name, rows, prev, c, allData, concRows, filled26, infoCol, prevConcProp) {
+function producaoModCard(tab, emoji, name, rows, prev, c, allData, concRows, filled26, infoCol, prevConcProp, repCount, repPct) {
   const saas    = rows.filter(r => isSaas(r[c.central]));
   const em      = rows.filter(r => (r[c.emerg]||'').toLowerCase() === 'sim').length;
   const avgT    = avgSecs(rows, c.tempo);
   const avgPrev = avgSecs(prev, c.tempo);
   const conc    = concRows ? concRows.length : null;
-  // Usa o valor proporcional via INFO_2026 quando disponível (dados brutos históricos incompletos)
   const cmpBase = prevConcProp !== undefined ? prevConcProp : prev.length;
+  const showRep = repCount !== undefined && repCount !== null;
 
   return `<div class="mod-card">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
@@ -207,6 +214,13 @@ function producaoModCard(tab, emoji, name, rows, prev, c, allData, concRows, fil
         <div class="kpi-value" style="font-size:22px;color:var(--red)">${fmtNum(em)}</div>
         <div class="kpi-sub">${rows.length ? ((em/rows.length)*100).toFixed(1) : 0}%</div>
       </div>
+      ${showRep ? `<div style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:8px;margin-top:2px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div class="kpi-label">Taxa de Repetição</div>
+          <div style="font-size:13px;font-weight:700;color:${repPct>3?'var(--red)':'var(--green)'}">${fmtPct(repPct)} · ${fmtNum(repCount)} repetições</div>
+        </div>
+        <span style="font-size:20px">${repPct>3?'🔴':'✅'}</span>
+      </div>` : ''}
     </div>
     <div class="kpi-label">Evolução 2026</div>
     ${sparkHTML(filled26 ? infoTrendBars(filled26, infoCol, allData || rows, c.dateConc) : getMonthlyTrend(allData || rows, c.dateSolic))}
