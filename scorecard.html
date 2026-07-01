@@ -156,14 +156,15 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
 <div class="topbar">
   <div class="topbar-inner">
     <div class="brand"><span class="dot"></span><div>ECGNow<small>Scorecard · Controladoria 2026</small></div></div>
-    <span class="period-chip">Realizado Jan – Mai 2026 · Balanços até Abr/26</span>
+    <span class="period-chip">Realizado Jan – Jun 2026 · Balanços até Mai/26</span>
     <label class="mes-sel">Mês de referência
       <select id="mesSel" onchange="setMes(+this.value)">
         <option value="0">Janeiro/26</option>
         <option value="1">Fevereiro/26</option>
         <option value="2">Março/26</option>
         <option value="3">Abril/26</option>
-        <option value="4" selected>Maio/26</option>
+        <option value="4">Maio/26</option>
+        <option value="5" selected>Junho/26</option>
       </select>
     </label>
     <nav class="nav">
@@ -240,7 +241,7 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
   <div class="grid g-2">
     <div class="card chart-card">
       <h3>Faturamento Bruto × % EBITDA</h3>
-      <div class="hint">Fev/26 concentra o único resultado operacional negativo do ano; desde então o EBITDA cresce por 3 meses seguidos.</div>
+      <div class="hint">Fev/26 concentra o único resultado operacional negativo do ano; desde então o EBITDA cresce por 4 meses seguidos, atingindo o recorde de 20,7% em jun/26.</div>
       <div class="legend"><span><i style="background:var(--navy2)"></i>Faturamento Bruto (R$)</span><span><i style="background:var(--cyan)"></i>% EBITDA</span></div>
       <div id="comboChart"></div>
     </div>
@@ -297,13 +298,13 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
   <div class="grid g-2" style="margin-bottom:16px">
     <div class="card chart-card">
       <h3>Exames Faturados por mês</h3>
-      <div class="hint">224.407 exames no acumulado · pico em abr/26 (51.298) · TD responde por 79,6% do volume.</div>
+      <div class="hint">273.106 exames no acumulado · pico em abr/26 (51.298) · TD responde por 79,4% do volume.</div>
       <div class="legend"><span><i style="background:#0a3d6e"></i>Telediagnóstico</span><span><i style="background:#0ea5e9"></i>SAAS</span><span><i style="background:#94c6e8"></i>Comodato</span></div>
       <div id="examVolChart"></div>
     </div>
     <div class="card chart-card">
       <h3>Valor Faturado por linha (R$)</h3>
-      <div class="hint">TD acumula R$ 2,34 mi e SAAS R$ 436 mil no ano; SAAS cresce 19,5% mai×jan, acima do TD (+18,0%).</div>
+      <div class="hint">TD acumula R$ 2,87 mi e SAAS R$ 537 mil no ano; SAAS cresce 23,4% jun×jan, próximo do TD (+25,1%). Valor de jun estimado (bloco não preenchido na planilha).</div>
       <div class="legend"><span><i style="background:#0a3d6e"></i>Telediagnóstico</span><span><i style="background:#0ea5e9"></i>SAAS</span><span><i style="background:#94c6e8"></i>Comodato</span></div>
       <div id="examValChart"></div>
     </div>
@@ -334,7 +335,7 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
   <div class="grid g-2">
     <div class="card chart-card">
       <h3>Receita Líquida × Ponto de Equilíbrio (R$)</h3>
-      <div class="hint">Em fev/26 a receita ficou abaixo do PE (margem de segurança −14,7%). Em mai/26 a folga é a maior do ano: 27,7%.</div>
+      <div class="hint">Em fev/26 a receita ficou abaixo do PE (margem de segurança −14,7%). Em jun/26 a folga é a maior do ano: 31,1%.</div>
       <div class="legend"><span><i style="background:var(--cyan)"></i>Receita Líquida</span><span><i style="background:var(--bad)"></i>Ponto de Equilíbrio</span></div>
       <div id="beChart"></div>
     </div>
@@ -348,27 +349,27 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
 
 <!-- ===================== 6. INDICADORES CONTÁBEIS ===================== -->
 <section id="contabil">
-  <div class="sec-head"><h2>Indicadores Contábeis</h2><span class="tag">Balanços Patrimoniais Jan – Abr/26</span></div>
-  <p class="sec-sub">Saúde patrimonial mensal apurada pela Simétrica Assessoria Contábil. O patrimônio líquido voltou a se recuperar fortemente em abril (+R$ 53,7 mil no mês).</p>
+  <div class="sec-head"><h2>Indicadores Contábeis</h2><span class="tag">Balanços Patrimoniais Jan – Mai/26</span></div>
+  <p class="sec-sub">Saúde patrimonial mensal apurada pela Simétrica Assessoria Contábil. O patrimônio líquido seguiu se recuperando em maio (+R$ 10,7 mil no mês), aproximando-se do positivo.</p>
   <div class="grid g-4" style="margin-bottom:16px" id="balKpis"></div>
   <div class="grid g-2">
     <div class="card chart-card">
       <h3>Evolução do Patrimônio Líquido (R$)</h3>
-      <div class="hint">PL negativo desde fev/26 pelo prejuízo acumulado histórico (R$ −1,09 mi em abr), parcialmente compensado pelo F.A.C. de R$ 1,066 mi.</div>
+      <div class="hint">PL negativo desde fev/26 pelo prejuízo acumulado histórico (R$ −1,076 mi em mai), parcialmente compensado pelo F.A.C. de R$ 1,066 mi. Recuperação de R$ 64,4 mil desde o vale de março.</div>
       <div id="plChart"></div>
     </div>
     <div class="card chart-card">
       <h3>Indicadores por mês</h3>
       <div class="hint">Referências usuais: Liquidez Corrente ≥ 1,5 · Liquidez Imediata ≥ 1,0 · CCL positivo.</div>
       <table>
-        <thead><tr><th>Indicador</th><th>Jan</th><th>Fev</th><th>Mar</th><th>Abr</th><th>Status</th></tr></thead>
+        <thead><tr><th>Indicador</th><th>Jan</th><th>Fev</th><th>Mar</th><th>Abr</th><th>Mai</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td>Liquidez Corrente (AC/PC)</td><td>2,46</td><td>2,27</td><td>1,78</td><td>2,15</td><td><span class="pill g">Confortável</span></td></tr>
-          <tr><td>Liquidez Imediata (Disp./PC)</td><td>1,42</td><td>1,16</td><td>0,92</td><td>1,15</td><td><span class="pill g">Recuperada</span></td></tr>
-          <tr><td>Capital Circulante Líquido (R$ mil)</td><td>323,9</td><td>250,9</td><td>211,2</td><td>262,6</td><td><span class="pill g">Positivo</span></td></tr>
-          <tr><td>Endividamento (Passivo/Ativo)</td><td>97,8%</td><td>105,2%</td><td>110,3%</td><td>102,3%</td><td><span class="pill y">Atenção</span></td></tr>
-          <tr><td>Prazo Médio de Recebimento (dias)</td><td>12,7</td><td>13,0</td><td>11,6</td><td>10,1</td><td><span class="pill g">Excelente</span></td></tr>
-          <tr><td>Carga Tributária Total (% Fat.)</td><td>9,4%</td><td>9,4%</td><td>7,9%</td><td>12,8%</td><td><span class="pill y">Lucro Presumido</span></td></tr>
+          <tr><td>Liquidez Corrente (AC/PC)</td><td>2,46</td><td>2,27</td><td>1,78</td><td>2,15</td><td>2,09</td><td><span class="pill g">Confortável</span></td></tr>
+          <tr><td>Liquidez Imediata (Disp./PC)</td><td>1,42</td><td>1,16</td><td>0,92</td><td>1,15</td><td>1,14</td><td><span class="pill g">Recuperada</span></td></tr>
+          <tr><td>Capital Circulante Líquido (R$ mil)</td><td>323,9</td><td>250,9</td><td>211,2</td><td>262,6</td><td>275,1</td><td><span class="pill g">Positivo</span></td></tr>
+          <tr><td>Endividamento (Passivo/Ativo)</td><td>97,8%</td><td>105,2%</td><td>110,3%</td><td>102,3%</td><td>100,6%</td><td><span class="pill y">Atenção</span></td></tr>
+          <tr><td>Prazo Médio de Recebimento (dias)</td><td>12,7</td><td>13,0</td><td>11,6</td><td>10,1</td><td>11,3</td><td><span class="pill g">Excelente</span></td></tr>
+          <tr><td>Carga Tributária Total (% Fat.)</td><td>9,4%</td><td>9,4%</td><td>7,9%</td><td>12,8%</td><td>11,0%</td><td><span class="pill y">Lucro Presumido</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -378,16 +379,16 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
 <!-- ===================== 7. CAIXA ===================== -->
 <section id="caixa">
   <div class="sec-head"><h2>Caixa & Geração de Caixa</h2><span class="tag">Posição e fluxo mensal</span></div>
-  <p class="sec-sub">Posição de caixa ao fim de cada mês (DRE gerencial) e geração líquida mensal. Três meses consecutivos de geração positiva e crescente após fev/26.</p>
+  <p class="sec-sub">Posição de caixa ao fim de cada mês (DRE gerencial) e geração líquida mensal. Quatro meses consecutivos de geração positiva e crescente após fev/26, encerrando junho no maior patamar do semestre.</p>
   <div class="grid g-2">
     <div class="card chart-card">
       <h3>Posição de Caixa (R$)</h3>
-      <div class="hint">Caixa recupera 26,3% desde o vale de fev/26 e encerra mai/26 em R$ 290,8 mil — já incluindo reserva financeira de R$ 25 mil.</div>
+      <div class="hint">Caixa recupera 50,2% desde o vale de fev/26 e encerra jun/26 em R$ 345,8 mil — melhor posição do 1º semestre.</div>
       <div id="cashChart"></div>
     </div>
     <div class="card chart-card">
       <h3>Geração de Caixa Mensal (R$)</h3>
-      <div class="hint">Soma do ano: R$ −18,3 mil, puxada exclusivamente por fev/26 (−R$ 84,9 mil).</div>
+      <div class="hint">Soma do 1º semestre: +R$ 36,7 mil, com junho no maior patamar (+R$ 54,9 mil) e fev/26 como único mês negativo (−R$ 84,9 mil).</div>
       <div id="cashGenChart"></div>
     </div>
   </div>
@@ -395,30 +396,30 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
 
 <!-- ===================== 7b. FORECAST 2026 ===================== -->
 <section id="forecast">
-  <div class="sec-head"><h2>Forecast 2026</h2><span class="tag">Realizado Jan–Mai + Projetado Jun–Dez</span></div>
-  <p class="sec-sub">Visão dos 12 meses consolidando o realizado oficial da DRE com o forecast da companhia. Barras e linhas sólidas = realizado; tonalidade clara e tracejado = projetado. Percentuais recalculados na convenção do scorecard (EBITDA sobre Receita Líquida).</p>
+  <div class="sec-head"><h2>Forecast 2026</h2><span class="tag">Realizado Jan–Jun + Projetado Jul–Dez</span></div>
+  <p class="sec-sub">Visão dos 12 meses consolidando o realizado oficial da DRE (Jan–Jun) com o forecast da companhia (Jul–Dez). Barras e linhas sólidas = realizado; tonalidade clara e tracejado = projetado. Percentuais recalculados na convenção do scorecard (EBITDA sobre Receita Líquida).</p>
   <div class="grid g-4" style="margin-bottom:16px" id="fcKpis"></div>
   <div class="card chart-card" style="margin-bottom:16px">
     <h3>Faturamento Bruto × % EBITDA · 12 meses</h3>
-    <div class="hint">Forecast revisado projeta um 2º semestre em expansão: EBITDA de 21–23% até outubro, com pico de faturamento de R$ 713 mil; nov–dez desaceleram com a sazonalidade (11,3% em dezembro).</div>
+    <div class="hint">Com junho já realizado (20,7% de EBITDA), o forecast projeta um 2º semestre forte: EBITDA de 22–24% de julho a outubro, com pico de faturamento de R$ 744 mil em outubro; nov–dez desaceleram (12,9% em dezembro).</div>
     <div class="legend"><span><i style="background:#0a3d6e"></i>Faturamento realizado</span><span><i style="background:#9dc3e0"></i>Faturamento projetado</span><span><i style="background:#10b981"></i>% EBITDA</span></div>
     <div id="fcChart"></div>
   </div>
   <div class="grid g-2" style="margin-bottom:16px">
     <div class="card chart-card">
       <h3>Trajetória de Caixa projetada (R$)</h3>
-      <div class="hint">O caixa sobe de forma consistente até o pico de R$ 539 mil em novembro e encerra o ano em R$ 511 mil — R$ 220 mil acima da posição atual.</div>
+      <div class="hint">O caixa sobe de forma consistente até o pico de R$ 621 mil em novembro e encerra o ano em R$ 607 mil — R$ 261 mil acima da posição de junho (R$ 346 mil).</div>
       <div id="fcCaixa"></div>
     </div>
     <div class="card chart-card">
       <h3>Lucro Líquido mensal (R$)</h3>
-      <div class="hint">Jun–out projetam cinco meses seguidos de lucro (R$ 236 mil somados); dezembro segue negativo (−R$ 27 mil) com 13º salário e impostos cheios.</div>
+      <div class="hint">Junho realizou R$ 52 mil de lucro; jul–out projetam mais R$ 250 mil somados. Dezembro segue negativo (−R$ 14 mil) com 13º salário e impostos cheios.</div>
       <div id="fcLL"></div>
     </div>
   </div>
   <div class="grid g-2">
-    <div class="insight"><div class="ico g">☀️</div><div><b>O 2º semestre carrega o ano e vira o resultado.</b><p>Junho a outubro projetam cinco meses de EBITDA entre 21% e 23%, com pico de faturamento de R$ 713 mil em outubro. O lucro líquido projetado do ano fecha positivo em R$ 201 mil — revertendo o acumulado negativo do 1º semestre.</p></div></div>
-    <div class="insight"><div class="ico y">🧊</div><div><b>Dezembro segue deficitário e mantém viva a tese do Lucro Real.</b><p>Mesmo com LAIR positivo de R$ 31 mil, dezembro projeta −R$ 27 mil de lucro líquido: o 13º salário (R$ 17,6 mil nov–dez) e IRPJ+CSLL de R$ 58 mil no Presumido consomem quase o dobro do resultado do mês. A distorção segue valendo a avaliação com a contabilidade.</p></div></div>
+    <div class="insight"><div class="ico g">☀️</div><div><b>O 2º semestre carrega o ano e o resultado já virou.</b><p>Junho fechou com EBITDA recorde de 20,7% e R$ 52 mil de lucro — o melhor mês do ano. Jul–out projetam EBITDA entre 22% e 24%, com pico de faturamento de R$ 744 mil em outubro. O lucro líquido projetado do ano sobe para R$ 297 mil (3,8% do faturamento).</p></div></div>
+    <div class="insight"><div class="ico y">🧊</div><div><b>Dezembro segue deficitário e mantém viva a tese do Lucro Real.</b><p>Dezembro projeta −R$ 14 mil de lucro líquido mesmo com faturamento de R$ 658 mil: o 13º salário e IRPJ+CSLL de ~R$ 60 mil no Presumido consomem todo o resultado do mês. Com o lucro anual agora positivo em R$ 297 mil, a comparação Presumido × Real fica ainda mais relevante para 2027.</p></div></div>
   </div>
 </section>
 
@@ -427,23 +428,23 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
   <div class="sec-head"><h2>Leitura Executiva</h2><span class="tag">O que os números dizem</span></div>
   <div class="grid g-2">
     <div>
-      <div class="insight"><div class="ico g">📈</div><div><b>Trajetória de rentabilidade é o destaque do ano.</b><p>O EBITDA saiu de −8,9% em fevereiro para 18,7% em maio — recorde de 2026 — com três meses seguidos de expansão. A margem de contribuição de 66,3% em maio é a melhor do ano.</p></div></div>
-      <div class="insight"><div class="ico g">🛡️</div><div><b>Risco operacional em queda.</b><p>O ponto de equilíbrio caiu de R$ 530 mil (fev) para R$ 421 mil (mai), combinando despesas fixas 11,5% menores e margem de contribuição maior. A margem de segurança de 27,7% é a maior folga do ano.</p></div></div>
-      <div class="insight"><div class="ico b">🔬</div><div><b>SAAS cresce acima do TD e sustenta margem superior.</b><p>O valor faturado SAAS subiu 19,5% entre jan e mai (vs. +18,0% no TD) e a linha entregou margem bruta de até 75,5% (abr). Mensalidades SAAS também crescem: de R$ 5,4 mil para R$ 7,5 mil/mês.</p></div></div>
-      <div class="insight"><div class="ico g">⚡</div><div><b>Eficiência de pessoal melhorou 10,6 p.p. no ano.</b><p>O custo total de pessoas caiu de 58,1% do faturamento (jan) para 47,5% (mai) — primeiro mês abaixo de 50% — mesmo com volume recorde de exames no bimestre abr–mai.</p></div></div>
+      <div class="insight"><div class="ico g">📈</div><div><b>Trajetória de rentabilidade é o destaque do ano.</b><p>O EBITDA saiu de −8,9% em fevereiro para 20,7% em junho — recorde de 2026 — com quatro meses seguidos de expansão. A margem de contribuição de 67,5% em maio segue como a melhor do ano, e o lucro líquido do 1º semestre virou positivo (R$ 31,5 mil).</p></div></div>
+      <div class="insight"><div class="ico g">🛡️</div><div><b>Risco operacional em queda.</b><p>O ponto de equilíbrio caiu de R$ 530 mil (fev) para R$ 427 mil (jun), com despesas fixas estáveis e margem de contribuição alta (66,7%). A margem de segurança de 31,1% em junho é a maior folga do ano.</p></div></div>
+      <div class="insight"><div class="ico b">🔬</div><div><b>SAAS cresce acima do TD e sustenta margem superior.</b><p>O valor faturado SAAS subiu 23,4% entre jan e jun (vs. +25,1% no TD) e a linha entregou margem bruta de até 75,5% (abr). Mensalidades SAAS também crescem: de R$ 5,4 mil para R$ 7,5 mil/mês.</p></div></div>
+      <div class="insight"><div class="ico g">⚡</div><div><b>Eficiência de pessoal melhorou 7,6 p.p. no ano.</b><p>O custo total de pessoas caiu de 58,1% do faturamento (jan) para 50,5% (jun); maio foi o piso do ano (47,5%). A eficiência se sustenta mesmo com o volume recorde de exames no 2º trimestre.</p></div></div>
     </div>
     <div>
-      <div class="insight"><div class="ico y">⚖️</div><div><b>Carga tributária pressiona o lucro líquido.</b><p>IRPJ+CSLL saltaram de ~R$ 22,9 mil/mês (Q1) para ~R$ 58,6 mil/mês em abr–mai pelo Lucro Presumido, consumindo 69% do LAIR de abril. A avaliação de migração para Lucro Real segue como principal alavanca fiscal.</p></div></div>
-      <div class="insight"><div class="ico y">🏛️</div><div><b>Patrimônio líquido ainda negativo, mas em recuperação.</b><p>O PL foi de −R$ 69,0 mil (mar) para −R$ 15,3 mil (abr), impulsionado pelo retorno ao lucro. Mantido o ritmo de mai/26 (+R$ 26,4 mil), o PL volta ao positivo no fechamento do 1º semestre.</p></div></div>
-      <div class="insight"><div class="ico r">📉</div><div><b>Fevereiro segue como o ponto fora da curva.</b><p>Único mês com prejuízo (−R$ 84,2 mil): menor faturamento do ano, margem bruta de 62,9% e despesas fixas no pico (R$ 321 mil, incluindo rescisão de R$ 20,4 mil). O acumulado do ano ainda carrega esse efeito: lucro líquido YTD de −R$ 20,5 mil.</p></div></div>
-      <div class="insight"><div class="ico b">💧</div><div><b>Liquidez confortável e recebimento ágil.</b><p>Liquidez corrente de 2,15 e prazo médio de recebimento de apenas 10,1 dias em abril. O capital circulante líquido de R$ 262,6 mil cobre 3,9 meses de IRPJ+CSLL correntes.</p></div></div>
+      <div class="insight"><div class="ico y">⚖️</div><div><b>Carga tributária pressiona o lucro líquido.</b><p>IRPJ+CSLL saltaram de ~R$ 22,9 mil/mês (Q1) para ~R$ 59 mil/mês desde abril pelo Lucro Presumido. Em junho consumiram 53% do LAIR de R$ 111,5 mil. A avaliação de migração para Lucro Real segue como principal alavanca fiscal.</p></div></div>
+      <div class="insight"><div class="ico y">🏛️</div><div><b>Patrimônio líquido ainda negativo, mas quase zerado.</b><p>O PL subiu de −R$ 69,0 mil (mar) para −R$ 4,5 mil (mai), impulsionado pelo retorno ao lucro. Com o lucro de R$ 52 mil em junho (balanço ainda não fechado), o PL deve virar positivo no fechamento do 1º semestre.</p></div></div>
+      <div class="insight"><div class="ico r">📉</div><div><b>Fevereiro segue como o ponto fora da curva.</b><p>Único mês com prejuízo (−R$ 84,2 mil): menor faturamento do ano, margem bruta de 62,9% e despesas fixas no pico (R$ 321 mil, incluindo rescisão de R$ 20,4 mil). O 1º semestre absorveu esse efeito e ainda assim fechou positivo: lucro líquido YTD de +R$ 31,5 mil.</p></div></div>
+      <div class="insight"><div class="ico b">💧</div><div><b>Liquidez confortável e recebimento ágil.</b><p>Liquidez corrente de 2,09 e prazo médio de recebimento de apenas 11,3 dias em maio. O capital circulante líquido de R$ 275,1 mil cobre 4,6 meses de IRPJ+CSLL correntes.</p></div></div>
     </div>
   </div>
 </section>
 
 <div class="foot">
   Scorecard Financeiro ECGNow Medicina Diagnóstica Ltda · CNPJ 23.154.712/0001-60 · Elaborado pela Controladoria — Jun/2026<br>
-  Fontes: Demonstrativo_Anual e Headcount (Dashboard Financeiro 2026) · Balanços Patrimoniais Jan–Abr/26 (Simétrica Assessoria Contábil).<br>
+  Fontes: Demonstrativo_Anual e Headcount (Dashboard Financeiro 2026) · Balanços Patrimoniais Jan–Mai/26 (Simétrica Assessoria Contábil) · Forecast_2026 (FORECAST26).<br>
   Convenções: Margem Bruta, M. Contribuição e EBITDA calculados sobre a Receita Líquida; % Lucro Líquido e % Headcount sobre o Faturamento Bruto, conforme DRE gerencial oficial.
 </div>
 </div>
@@ -454,46 +455,46 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
    BASE DE DADOS — valores extraídos da DRE gerencial (aba
    Demonstrativo_Anual), aba Headcount e balanços contábeis.
    ============================================================ */
-const MESES = ['Jan','Fev','Mar','Abr','Mai'];
-const MESES_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio'];
-let SEL = 4;          // índice do mês de referência (0=Jan ... 4=Mai)
+const MESES = ['Jan','Fev','Mar','Abr','Mai','Jun'];
+const MESES_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho'];
+let SEL = 5;          // índice do mês de referência (0=Jan ... 5=Jun)
 let WFMODE = 'mes';   // modo da cascata: 'mes' ou 'ytd'
 const D = {
-  fat:   [535147.10, 505719.87, 601539.47, 670697.29, 636552.67],
-  recBruta:[531526.57, 486583.35, 581914.64, 645530.53, 593022.15], // competência (base da DRE)
-  rl:    [503869.83, 461987.52, 557081.14, 617673.68, 582064.04],
-  lb:    [341164.78, 290566.44, 376742.60, 408769.53, 397284.21],
-  mc:    [333152.07, 279730.31, 370829.16, 402246.73, 393002.68],
-  ebitda:[40271.35, -41222.59, 60818.88, 96716.99, 108969.06],
-  ll:    [6041.17, -84236.14, 20360.42, 10943.43, 26373.99],
+  fat:   [535147.10, 505719.87, 601539.47, 670697.29, 636552.67, 660409.28],
+  recBruta:[531526.57, 486583.35, 581914.64, 645530.53, 593022.15, 630225.39], // competência (base da DRE)
+  rl:    [503869.83, 461987.52, 557081.14, 617673.68, 582064.04, 619659.03],
+  lb:    [341164.78, 290566.44, 376742.60, 408769.53, 397284.21, 414928.23],
+  mc:    [333152.07, 279730.31, 370829.16, 402246.73, 393002.68, 413373.57],
+  ebitda:[40271.35, -41222.59, 60818.88, 96716.99, 108969.06, 128557.33],
+  ll:    [6041.17, -84236.14, 20360.42, 10943.43, 26373.99, 51998.28],
   // Despesas por categoria (DRE gerencial)
-  impFat:[27656.74, 24595.83, 24833.50, 27856.85, 10958.11],
-  csp:   [162705.05, 171421.08, 180338.55, 208904.15, 184779.83],
-  despVar:[8012.71, 10836.13, 5913.44, 6522.80, 4281.53],
-  pessoal8:[143479.04, 150827.16, 155402.03, 137319.56, 120657.86],
-  pj:    [40408.31, 44244.70, 38011.31, 43890.14, 35312.75],
-  ti:    [73868.91, 93396.94, 83959.70, 91865.88, 95353.96],
-  tribut:[11771.38, 9955.74, 9929.06, 11140.27, 11914.48],
-  escrit:[22585.23, 21796.15, 22039.06, 20613.77, 19804.40],
-  finFix:[767.85, 732.21, 669.12, 700.12, 990.17],
-  invest:[9413.74, 11072.88, 8178.31, 14496.81, 9312.68],
-  despFin:[10496.28, 9565.87, 9617.63, 14168.60, 14437.89],
-  irCsll:[22493.46, 22718.36, 22943.29, 58323.92, 58907.15],
-  resFin:[-2322.98, -9222.31, -9336.86, -12952.83, -14375.24],
-  despFixas:[292880.72, 320952.90, 310010.28, 305529.74, 284033.62],
-  pessoal:[310880.65, 312212.43, 326772.13, 353369.73, 302357.93], // aba Headcount (custo total de pessoas)
-  caixa: [315142.20, 230226.09, 251790.12, 263360.47, 290844.92],
-  gerCaixa:[6041.17, -84916.11, 21564.03, 11570.35, 27484.46],
-  exTD:  [30328, 30788, 38067, 40735, 38723],
-  exSAAS:[8178, 8544, 8379, 10260, 9385],
-  exCom: [131, 200, 190, 303, 196],
-  vTD:   [426566.48, 389476.07, 485111.76, 533563.88, 503511.59],
-  vSAAS: [81366.88, 76655.49, 82872.05, 98157.34, 97220.73],
-  vCom:  [12222.93, 12205.33, 12034.75, 16877.23, 15932.52],
-  vCursos:[9567.91, 19257.82, 18888.48, 16824.20, 14387.68],
-  mbTD:  [64.2, 57.2, 66.2, 60.5, 64.9],
-  mbSAAS:[69.9, 67.3, 60.5, 75.5, 66.0],
-  mbEDU: [-75.1, 22.4, 16.7, 1.6, 28.9]
+  impFat:[27656.74, 24595.83, 24833.50, 27856.85, 10958.11, 10566.36],
+  csp:   [162705.05, 171421.08, 180338.55, 208904.15, 184779.83, 204730.80],
+  despVar:[8012.71, 10836.13, 5913.44, 6522.80, 4281.53, 1554.66],
+  pessoal8:[143479.04, 150827.16, 155402.03, 137319.56, 120657.86, 132189.92],
+  pj:    [40408.31, 44244.70, 38011.31, 43890.14, 35312.75, 32726.48],
+  ti:    [73868.91, 93396.94, 83959.70, 91865.88, 95353.96, 88491.17],
+  tribut:[11771.38, 9955.74, 9929.06, 11140.27, 11914.48, 11251.57],
+  escrit:[22585.23, 21796.15, 22039.06, 20613.77, 19804.40, 19133.02],
+  finFix:[767.85, 732.21, 669.12, 700.12, 990.17, 1024.08],
+  invest:[9413.74, 11072.88, 8178.31, 14496.81, 9312.68, 10787.27],
+  despFin:[10496.28, 9565.87, 9617.63, 14168.60, 14437.89, 14241.22],
+  irCsll:[22493.46, 22718.36, 22943.29, 58323.92, 58907.15, 59531.22],
+  resFin:[-2322.98, -9222.31, -9336.86, -12952.83, -14375.24, -6240.56],
+  despFixas:[292880.72, 320952.90, 310010.28, 305529.74, 284033.62, 284816.24],
+  pessoal:[310880.65, 312212.43, 326772.13, 353369.73, 302357.93, 333523.51], // custo total de pessoas (base DRE)
+  caixa: [315142.20, 230226.09, 251790.12, 263360.47, 290844.92, 345752.22],
+  gerCaixa:[6041.17, -84916.11, 21564.03, 11570.35, 27484.46, 54907.30],
+  exTD:  [30328, 30788, 38067, 40735, 38723, 38132],
+  exSAAS:[8178, 8544, 8379, 10260, 9385, 10327],
+  exCom: [131, 200, 190, 303, 196, 240],
+  vTD:   [426566.48, 389476.07, 485111.76, 533563.88, 503511.59, 533723.45],
+  vSAAS: [81366.88, 76655.49, 82872.05, 98157.34, 97220.73, 100444.25],
+  vCom:  [12222.93, 12205.33, 12034.75, 16877.23, 15932.52, 15625.85],
+  vCursos:[9567.91, 19257.82, 18888.48, 16824.20, 14387.68, 19479.65],
+  mbTD:  [64.2, 57.2, 66.2, 60.5, 64.9, 63.3],
+  mbSAAS:[69.9, 67.3, 60.5, 75.5, 66.0, 67.9],
+  mbEDU: [-75.1, 22.4, 16.7, 1.6, 28.9, 48.1]
 };
 // Derivados ---------------------------------------------------
 const pct=(a,b)=>a/b*100;
@@ -601,12 +602,12 @@ function renderKPIs(){
   const ytdHC=pct(sumTo(D.pessoal,m),ytdFat);
   const fmtMi=v=>'R$ '+(v/1e6).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+' mi';
   const kpis=[
-    {label:'Faturamento Bruto', val:fmtRk(D.fat[m]), ytd:'YTD '+fmtMi(ytdFat), vals:D.fat, delta:p>=0?pct(D.fat[m]-D.fat[p],D.fat[p]):null, good:'high', avg:sum(D.fat)/5, cur:D.fat[m]},
-    {label:'% Margem Bruta', val:fmtP(D.mbP[m]), ytd:'YTD '+fmtP(ytdMB), vals:D.mbP, delta:p>=0?D.mbP[m]-D.mbP[p]:null, pp:true, good:'high', avg:sum(D.mbP)/5, cur:D.mbP[m]},
-    {label:'% Margem de Contribuição', val:fmtP(D.mcP[m]), ytd:'YTD '+fmtP(ytdMC), vals:D.mcP, delta:p>=0?D.mcP[m]-D.mcP[p]:null, pp:true, good:'high', avg:sum(D.mcP)/5, cur:D.mcP[m]},
-    {label:'% EBITDA', val:fmtP(D.ebP[m]), ytd:'YTD '+fmtP(ytdEB), vals:D.ebP, delta:p>=0?D.ebP[m]-D.ebP[p]:null, pp:true, good:'high', avg:sum(D.ebP)/5, cur:D.ebP[m]},
-    {label:'% Lucro Líquido', val:fmtP(D.llP[m]), ytd:'YTD '+fmtP(ytdLL), vals:D.llP, delta:p>=0?D.llP[m]-D.llP[p]:null, pp:true, good:'high', avg:sum(D.llP)/5, cur:D.llP[m]},
-    {label:'% Headcount s/ Faturamento', val:fmtP(D.hcP[m]), ytd:'YTD '+fmtP(ytdHC), vals:D.hcP, delta:p>=0?D.hcP[m]-D.hcP[p]:null, pp:true, good:'low', avg:sum(D.hcP)/5, cur:D.hcP[m]}
+    {label:'Faturamento Bruto', val:fmtRk(D.fat[m]), ytd:'YTD '+fmtMi(ytdFat), vals:D.fat, delta:p>=0?pct(D.fat[m]-D.fat[p],D.fat[p]):null, good:'high', avg:sum(D.fat)/D.fat.length, cur:D.fat[m]},
+    {label:'% Margem Bruta', val:fmtP(D.mbP[m]), ytd:'YTD '+fmtP(ytdMB), vals:D.mbP, delta:p>=0?D.mbP[m]-D.mbP[p]:null, pp:true, good:'high', avg:sum(D.mbP)/D.mbP.length, cur:D.mbP[m]},
+    {label:'% Margem de Contribuição', val:fmtP(D.mcP[m]), ytd:'YTD '+fmtP(ytdMC), vals:D.mcP, delta:p>=0?D.mcP[m]-D.mcP[p]:null, pp:true, good:'high', avg:sum(D.mcP)/D.mcP.length, cur:D.mcP[m]},
+    {label:'% EBITDA', val:fmtP(D.ebP[m]), ytd:'YTD '+fmtP(ytdEB), vals:D.ebP, delta:p>=0?D.ebP[m]-D.ebP[p]:null, pp:true, good:'high', avg:sum(D.ebP)/D.ebP.length, cur:D.ebP[m]},
+    {label:'% Lucro Líquido', val:fmtP(D.llP[m]), ytd:'YTD '+fmtP(ytdLL), vals:D.llP, delta:p>=0?D.llP[m]-D.llP[p]:null, pp:true, good:'high', avg:sum(D.llP)/D.llP.length, cur:D.llP[m]},
+    {label:'% Headcount s/ Faturamento', val:fmtP(D.hcP[m]), ytd:'YTD '+fmtP(ytdHC), vals:D.hcP, delta:p>=0?D.hcP[m]-D.hcP[p]:null, pp:true, good:'low', avg:sum(D.hcP)/D.hcP.length, cur:D.hcP[m]}
   ];
   const grid=document.getElementById('kpiGrid');grid.innerHTML='';
   document.getElementById('kpiTag').textContent=MESES_FULL[m]+'/26 · farol vs. média do ano';
@@ -635,16 +636,17 @@ function renderKPIs(){
   // Combo: barras de faturamento + linha de % EBITDA (eixo secundário)
   const w=560,h=290,padL=64,padR=52,padT=18,padB=30;
   const max=niceMax(Math.max(...D.fat));
-  const eMin=-12,eMax=22;
+  const eMin=-12,eMax=26;
+  const NM=MESES.length;
   const s=svgEl(w,h);
-  const x=i=>padL+i*(w-padL-padR)/5+(w-padL-padR)/5*0.18;
-  const bw=(w-padL-padR)/5*0.64;
+  const x=i=>padL+i*(w-padL-padR)/NM+(w-padL-padR)/NM*0.18;
+  const bw=(w-padL-padR)/NM*0.60;
   const y=v=>padT+(h-padT-padB)*(1-v/max);
   const ye=v=>padT+(h-padT-padB)*(1-(v-eMin)/(eMax-eMin));
   for(let g=0;g<=4;g++){const v=max*g/4;
     s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
     s.appendChild(el('text',{x:padL-8,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},(v/1000)+'k'));}
-  [-10,0,10,20].forEach(v=>s.appendChild(el('text',{x:w-padR+8,y:ye(v)+4,'font-size':10,fill:'#0ea5e9','font-weight':700},v+'%')));
+  [-10,0,10,20,26].forEach(v=>s.appendChild(el("text",{x:w-padR+8,y:ye(v)+4,'font-size':10,fill:'#0ea5e9','font-weight':700},v+'%')));
   MESES.forEach((m,i)=>{
     s.appendChild(el('rect',{x:x(i),y:y(D.fat[i]),width:bw,height:y(0)-y(D.fat[i]),fill:'#0a3d6e',rx:5}));
     s.appendChild(el('text',{x:x(i)+bw/2,y:y(D.fat[i])+15,'text-anchor':'middle','font-size':10,'font-weight':800,fill:'#cfe7f7'},Math.round(D.fat[i]/1000)+'k'));
@@ -878,7 +880,7 @@ function renderResumo(){
     {l:'Headcount',v:D.hcP,good:'low'}
   ];
   document.getElementById('rsChips').innerHTML=chips.map(c=>{
-    const avg=sum(c.v)/5, cur=c.v[i];
+    const avg=sum(c.v)/c.v.length, cur=c.v[i];
     const diff=c.good==='high'?cur-avg:avg-cur;
     const farol=diff>1?'g':(diff<-1?'r':'y');
     let d='<span class="d flat">—</span>';
@@ -891,10 +893,11 @@ function renderResumo(){
   (function(){
     const w=560,h=215,padL=46,padR=46,padT=20,padB=24;
     const max=niceMax(Math.max(...D.fat));
-    const eMin=-12,eMax=22;
+    const eMin=-12,eMax=26;
+    const NM=MESES.length;
     const s=svgEl(w,h);
-    const x=k=>padL+k*(w-padL-padR)/5+(w-padL-padR)/5*0.18;
-    const bw=(w-padL-padR)/5*0.64;
+    const x=k=>padL+k*(w-padL-padR)/NM+(w-padL-padR)/NM*0.18;
+    const bw=(w-padL-padR)/NM*0.60;
     const y=v=>padT+(h-padT-padB)*(1-v/max);
     const ye=v=>padT+(h-padT-padB)*(1-(v-eMin)/(eMax-eMin));
     s.appendChild(el('line',{x1:padL,x2:w-padR,y1:ye(0),y2:ye(0),stroke:'#cbd5e1','stroke-dasharray':'4 4'}));
@@ -971,24 +974,24 @@ document.querySelectorAll('.nav a[href^="#"]').forEach(a=>a.addEventListener('cl
 window.addEventListener('resize',fitResumo);
 
 /* ============================================================
-   FORECAST 2026 — projetado Jun–Dez (aba FORECAST26)
-   Consolidação anual = realizado oficial (Jan–Mai) + forecast
+   FORECAST 2026 — projetado Jul–Dez (aba FORECAST26 revisada)
+   Realizado oficial Jan–Jun (DRE) + forecast Jul–Dez
    ============================================================ */
-const MESES_F=['Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const MESES_F=['Jul','Ago','Set','Out','Nov','Dez'];
 const F={
-  fat:   [662573.17, 658614.87, 678614.87, 685401.02, 712817.06, 677176.21, 629773.87],
-  rl:    [602941.58, 599339.53, 617539.53, 623714.93, 648663.52, 616230.35, 573094.22],
-  ebitda:[133309.63, 128893.74, 135392.90, 141352.70, 149271.46, 104828.22, 64849.65],
-  ll:    [44544.67, 39668.39, 44117.58, 49435.31, 57856.75, 13343.03, -27279.20],
-  caixa: [334163.81, 373832.20, 417949.78, 467385.09, 525241.84, 538584.86, 511305.67]
+  fat:   [688614.87, 708614.87, 715701.02, 744329.06, 707112.61, 657614.72],
+  rl:    [626639.53, 644839.53, 651287.93, 677339.44, 643472.47, 598429.40],
+  ebitda:[140950.67, 146995.51, 157179.39, 165448.62, 119597.03, 77446.68],
+  ll:    [52612.67, 56615.37, 66165.20, 74945.19, 29031.30, -13754.46],
+  caixa: [394230.09, 450845.46, 517010.66, 591955.85, 620987.15, 607232.69]
 };
 F.ebP=F.ebitda.map((v,i)=>pct(v,F.rl[i]));
 // Totais consolidados do ano
 const ANO={
-  fat: sum(D.fat)+sum(F.fat),            // 7.340.804
+  fat: sum(D.fat)+sum(F.fat),
   rl:  sum(D.rl)+sum(F.rl),
-  eb:  sum(D.ebitda)+sum(F.ebitda),      // 884.947
-  ll:  sum(D.ll)+sum(F.ll)               // −37.336
+  eb:  sum(D.ebitda)+sum(F.ebitda),
+  ll:  sum(D.ll)+sum(F.ll)
 };
 ANO.ebP=pct(ANO.eb,ANO.rl); ANO.llP=pct(ANO.ll,ANO.fat);
 
@@ -999,8 +1002,8 @@ function renderForecast(){
   const items=[
     {l:'Faturamento projetado 2026',v:fmtMi(ANO.fat),s:`${fmtMi(sum(D.fat))} realizado + ${fmtMi(sum(F.fat))} projetado`,f:'g'},
     {l:'EBITDA projetado 2026',v:fmtSmart(ANO.eb),s:`${fmtP(ANO.ebP)} da Receita Líquida do ano`,f:'g'},
-    {l:'Lucro Líquido projetado 2026',v:fmtRk(ANO.ll),s:`${fmtP(ANO.llP)} do faturamento · dez projeta −R$ 27 mil`,f:ANO.ll>=0?'g':'y'},
-    {l:'Caixa em Dez/26',v:fmtRk(F.caixa[6]),s:'Pico de R$ 539 mil em Nov/26',f:'g'}
+    {l:'Lucro Líquido projetado 2026',v:fmtSmart(ANO.ll),s:`${fmtP(ANO.llP)} do faturamento · dez projeta −R$ 14 mil`,f:ANO.ll>=0?'g':'y'},
+    {l:'Caixa em Dez/26',v:fmtRk(F.caixa[5]),s:'Pico de R$ 621 mil em Nov/26',f:'g'}
   ];
   const g=document.getElementById('fcKpis');g.innerHTML='';
   items.forEach(it=>{
@@ -1015,7 +1018,7 @@ function renderForecast(){
     const M12=MESES.concat(MESES_F);
     const fat12=D.fat.concat(F.fat), eb12=D.ebP.concat(F.ebP);
     const c=document.getElementById('fcChart');c.innerHTML='';
-    const w=1140,h=320,padL=64,padR=52,padT=20,padB=30,n=12,cut=5; // cut = início do projetado
+    const w=1140,h=320,padL=64,padR=52,padT=20,padB=30,n=12,cut=D.fat.length; // cut = início do projetado
     const max=niceMax(Math.max(...fat12));
     const eMin=-12,eMax=26;
     const s=svgEl(w,h);
@@ -1026,7 +1029,7 @@ function renderForecast(){
     for(let g2=0;g2<=4;g2++){const v=max*g2/4;
       s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
       s.appendChild(el('text',{x:padL-8,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},(v/1000)+'k'));}
-    [0,10,20].forEach(v=>s.appendChild(el('text',{x:w-padR+8,y:ye(v)+4,'font-size':10,fill:'#0ea5e9','font-weight':700},v+'%')));
+    [0,10,20,24].forEach(v=>s.appendChild(el('text',{x:w-padR+8,y:ye(v)+4,'font-size':10,fill:'#0ea5e9','font-weight':700},v+'%')));
     // divisória realizado | projetado
     const xDiv=(x(cut-1)+bw+x(cut))/2;
     s.appendChild(el('line',{x1:xDiv,x2:xDiv,y1:padT-6,y2:h-padB,stroke:'#94a3b8','stroke-dasharray':'5 4'}));
@@ -1053,12 +1056,12 @@ function renderForecast(){
     const M12=MESES.concat(MESES_F);
     const cx12=D.caixa.concat(F.caixa);
     const c=document.getElementById('fcCaixa');c.innerHTML='';
-    const w=560,h=270,padL=64,padR=16,padT=24,padB=30,n=12,cut=5;
-    const min=200000,max=580000;
+    const w=560,h=270,padL=64,padR=16,padT=24,padB=30,n=12,cut=D.fat.length;
+    const min=200000,max=660000;
     const s=svgEl(w,h);
     const x=i=>padL+i*(w-padL-padR)/(n-1);
     const y=v=>padT+(h-padT-padB)*(1-(v-min)/(max-min));
-    [200000,300000,400000,500000].forEach(v=>{s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
+    [200000,350000,500000,650000].forEach(v=>{s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
       s.appendChild(el('text',{x:padL-8,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},Math.round(v/1000)+'k'));});
     const pt=i=>`${x(i)},${y(cx12[i])}`;
     s.appendChild(el('polyline',{points:cx12.map((_,i)=>pt(i)).join(' ')+` ${x(n-1)},${y(min)} ${x(0)},${y(min)}`,fill:'#0a3d6e',opacity:.06}));
@@ -1077,13 +1080,13 @@ function renderForecast(){
     const M12=MESES.concat(MESES_F);
     const ll12=D.ll.concat(F.ll);
     const c=document.getElementById('fcLL');c.innerHTML='';
-    const w=560,h=270,padL=58,padR=14,padT=20,padB=30,n=12,cut=5;
-    const min=-100000,max=60000;
+    const w=560,h=270,padL=58,padR=14,padT=20,padB=30,n=12,cut=D.fat.length;
+    const min=-100000,max=90000;
     const s=svgEl(w,h);
     const x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.16;
     const bw=(w-padL-padR)/n*0.68;
     const y=v=>padT+(h-padT-padB)*(1-(v-min)/(max-min));
-    [-80000,-40000,0,40000].forEach(v=>{s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
+    [-80000,-40000,0,40000,80000].forEach(v=>{s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
       s.appendChild(el('text',{x:padL-8,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},Math.round(v/1000)+'k'));});
     s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(0),y2:y(0),stroke:'#94a3b8','stroke-dasharray':'4 4'}));
     ll12.forEach((v,i)=>{
@@ -1097,7 +1100,7 @@ function renderForecast(){
   // ---- Linha de projeção na capa ----
   document.getElementById('rsProj').innerHTML=
     `<span class="pl">Projeção de fechamento 2026 · forecast</span>
-     Faturamento <b>${fmtMi(ANO.fat)}</b> · EBITDA <b>${fmtSmart(ANO.eb)} (${fmtP(ANO.ebP)})</b> · caixa dez <b>${fmtRk(F.caixa[6])}</b>`;
+     Faturamento <b>${fmtMi(ANO.fat)}</b> · EBITDA <b>${fmtSmart(ANO.eb)} (${fmtP(ANO.ebP)})</b> · caixa dez <b>${fmtRk(F.caixa[5])}</b>`;
 }
 
 /* ---------- Inicialização ---------- */
@@ -1137,7 +1140,7 @@ stackedBars(document.getElementById('examValChart'),
     const p=`M ${cx+r*Math.cos(a0)} ${cy+r*Math.sin(a0)} A ${r} ${r} 0 ${large} 1 ${cx+r*Math.cos(a1)} ${cy+r*Math.sin(a1)} L ${cx+ir*Math.cos(a1)} ${cy+ir*Math.sin(a1)} A ${ir} ${ir} 0 ${large} 0 ${cx+ir*Math.cos(a0)} ${cy+ir*Math.sin(a0)} Z`;
     s.appendChild(el('path',{d:p,fill:sl.c}));
     a0=a1;});
-  s.appendChild(el('text',{x:cx,y:cy-4,'text-anchor':'middle','font-size':17,'font-weight':800,fill:'#0D2137'},'R$ 2,89 mi'));
+  s.appendChild(el('text',{x:cx,y:cy-4,'text-anchor':'middle','font-size':17,'font-weight':800,fill:'#0D2137'},'R$ 3,59 mi'));
   s.appendChild(el('text',{x:cx,y:cy+14,'text-anchor':'middle','font-size':10,fill:'#5b7187','font-weight':700},'YTD 2026'));
   slices.forEach((sl,i)=>{
     s.appendChild(el('rect',{x:236,y:52+i*34,width:13,height:13,rx:4,fill:sl.c}));
@@ -1152,15 +1155,16 @@ stackedBars(document.getElementById('examValChart'),
   const w=360,h=250,padL=46,padR=34,padT=20,padB=30;
   const min=12,max=14.5;
   const s=svgEl(w,h);
-  const x=i=>padL+i*(w-padL-padR)/(5-1);
+  const NL=D.ticket.length-1;
+  const x=i=>padL+i*(w-padL-padR)/NL;
   const y=v=>padT+(h-padT-padB)*(1-(v-min)/(max-min));
   [12,13,14].forEach(v=>{s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
     s.appendChild(el('text',{x:padL-6,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},'R$'+v));});
   const pts=D.ticket.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
-  s.appendChild(el('polyline',{points:`${x(0)},${y(min)} ${pts} ${x(4)},${y(min)}`,fill:'#0ea5e9',opacity:.10}));
+  s.appendChild(el('polyline',{points:`${x(0)},${y(min)} ${pts} ${x(NL)},${y(min)}`,fill:'#0ea5e9',opacity:.10}));
   s.appendChild(el('polyline',{points:pts,fill:'none',stroke:'#0ea5e9','stroke-width':3,'stroke-linecap':'round'}));
-  D.ticket.forEach((v,i)=>{s.appendChild(el('circle',{cx:x(i),cy:y(v),r:4,fill:'#fff',stroke:'#0ea5e9','stroke-width':2.4}));
-    s.appendChild(el('text',{x:x(i),y:y(v)-10,'text-anchor':'middle','font-size':10.5,'font-weight':800,fill:'#0284c7'},'R$ '+v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})));
+  D.ticket.forEach((v,i)=>{s.appendChild(el('circle',{cx:x(i),cy:y(v),r:3.6,fill:'#fff',stroke:'#0ea5e9','stroke-width':2.2}));
+    s.appendChild(el('text',{x:x(i),y:y(v)-9,'text-anchor':'middle','font-size':9,'font-weight':800,fill:'#0284c7'},v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})));
     s.appendChild(el('text',{x:x(i),y:h-8,'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#5b7187'},MESES[i]));});
   c.appendChild(s);
 })();
@@ -1168,7 +1172,7 @@ stackedBars(document.getElementById('examValChart'),
 // Heatmap de margem bruta por linha
 (function(){
   const rows=[{n:'Telediagnóstico',d:D.mbTD},{n:'SAAS',d:D.mbSAAS},{n:'Educação',d:D.mbEDU}];
-  const w=360,h=250,padL=104,padT=36,cw=(w-padL-12)/5,ch=52;
+  const w=360,h=250,padL=104,padT=36,cw=(w-padL-12)/MESES.length,ch=44;
   const s=svgEl(w,h);
   MESES.forEach((m,i)=>s.appendChild(el('text',{x:padL+i*cw+cw/2,y:padT-10,'text-anchor':'middle','font-size':10.5,'font-weight':800,fill:'#5b7187'},m)));
   rows.forEach((r,ri)=>{
@@ -1197,7 +1201,7 @@ lineChart(document.getElementById('beChart'),
   const w=560,h=270,padL=52,padR=14,padT=18,padB=30;
   const min=-20,max=35;
   const s=svgEl(w,h);
-  const n=5,x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.18,bw=(w-padL-padR)/n*0.64;
+  const n=D.msP.length,x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.18,bw=(w-padL-padR)/n*0.60;
   const y=v=>padT+(h-padT-padB)*(1-(v-min)/(max-min));
   [-20,-10,0,10,20,30].forEach(v=>{s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
     s.appendChild(el('text',{x:padL-8,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},v+'%'));});
@@ -1215,10 +1219,10 @@ lineChart(document.getElementById('beChart'),
    ============================================================ */
 (function(){
   const items=[
-    {l:'Liquidez Corrente (Abr)',v:'2,15',s:'AC R$ 490,5 mil ÷ PC R$ 227,9 mil',f:'g'},
-    {l:'Capital Circulante Líquido',v:'R$ 262,6 mil',s:'+R$ 51,4 mil vs Mar/26',f:'g'},
-    {l:'Patrimônio Líquido (Abr)',v:'−R$ 15,3 mil',s:'+R$ 53,7 mil de recuperação no mês',f:'y'},
-    {l:'Disponibilidades (Abr)',v:'R$ 261,5 mil',s:'71% em aplicações (CDB + Aut. Mais)',f:'g'}
+    {l:'Liquidez Corrente (Mai)',v:'2,09',s:'AC R$ 527,2 mil ÷ PC R$ 252,1 mil',f:'g'},
+    {l:'Capital Circulante Líquido',v:'R$ 275,1 mil',s:'+R$ 12,5 mil vs Abr/26',f:'g'},
+    {l:'Patrimônio Líquido (Mai)',v:'−R$ 4,5 mil',s:'+R$ 10,7 mil no mês · perto do positivo',f:'y'},
+    {l:'Disponibilidades (Mai)',v:'R$ 287,8 mil',s:'87% em aplicações (CDB + Aut. Mais)',f:'g'}
   ];
   const g=document.getElementById('balKpis');
   items.forEach(it=>{
@@ -1232,11 +1236,11 @@ lineChart(document.getElementById('beChart'),
 // Evolução do PL
 (function(){
   const c=document.getElementById('plChart');
-  const meses=['Jan','Fev','Mar','Abr'],pl=[16360.59,-33370.57,-68960.10,-15258.75];
+  const meses=['Jan','Fev','Mar','Abr','Mai'],pl=[16360.59,-33370.57,-68960.10,-15258.75,-4514.74];
   const w=560,h=270,padL=64,padR=14,padT=20,padB=30;
   const min=-85000,max=35000;
   const s=svgEl(w,h);
-  const n=4,x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.18,bw=(w-padL-padR)/n*0.64;
+  const n=5,x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.18,bw=(w-padL-padR)/n*0.64;
   const y=v=>padT+(h-padT-padB)*(1-(v-min)/(max-min));
   [-80000,-40000,0,20000].forEach(v=>{s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
     s.appendChild(el('text',{x:padL-8,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},Math.round(v/1000)+'k'));});
@@ -1255,14 +1259,14 @@ lineChart(document.getElementById('beChart'),
 (function(){
   const c=document.getElementById('cashChart');
   const w=560,h=270,padL=64,padR=14,padT=22,padB=30;
-  const min=200000,max=340000;
+  const min=200000,max=380000,NL=D.caixa.length-1;
   const s=svgEl(w,h);
-  const x=i=>padL+i*(w-padL-padR)/4;
+  const x=i=>padL+i*(w-padL-padR)/NL;
   const y=v=>padT+(h-padT-padB)*(1-(v-min)/(max-min));
-  [200000,250000,300000].forEach(v=>{s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
+  [200000,260000,320000,380000].forEach(v=>{s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
     s.appendChild(el('text',{x:padL-8,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},Math.round(v/1000)+'k'));});
   const pts=D.caixa.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
-  s.appendChild(el('polyline',{points:`${x(0)},${y(min)} ${pts} ${x(4)},${y(min)}`,fill:'#0a3d6e',opacity:.08}));
+  s.appendChild(el('polyline',{points:`${x(0)},${y(min)} ${pts} ${x(NL)},${y(min)}`,fill:'#0a3d6e',opacity:.08}));
   s.appendChild(el('polyline',{points:pts,fill:'none',stroke:'#0a3d6e','stroke-width':3,'stroke-linecap':'round'}));
   D.caixa.forEach((v,i)=>{s.appendChild(el('circle',{cx:x(i),cy:y(v),r:4.2,fill:'#fff',stroke:'#0a3d6e','stroke-width':2.4}));
     s.appendChild(el('text',{x:x(i),y:y(v)-10,'text-anchor':'middle','font-size':10.5,'font-weight':800,fill:'#0D2137'},Math.round(v/1000)+'k'));
@@ -1272,9 +1276,9 @@ lineChart(document.getElementById('beChart'),
 (function(){
   const c=document.getElementById('cashGenChart');
   const w=560,h=270,padL=64,padR=14,padT=22,padB=30;
-  const min=-95000,max=40000;
+  const min=-95000,max=65000;
   const s=svgEl(w,h);
-  const n=5,x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.18,bw=(w-padL-padR)/n*0.64;
+  const n=D.gerCaixa.length,x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.18,bw=(w-padL-padR)/n*0.60;
   const y=v=>padT+(h-padT-padB)*(1-(v-min)/(max-min));
   [-80000,-40000,0,40000].forEach(v=>{s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
     s.appendChild(el('text',{x:padL-8,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},Math.round(v/1000)+'k'));});
