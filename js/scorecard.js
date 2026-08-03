@@ -1,49 +1,49 @@
 // ═══════════════════════════════════════════════
 //  SCORECARD NATIVO — DRE Cascata · Despesas · Forecast 2026
-//  Dados da Controladoria (Jan–Mai realizado + Jun–Dez projetado).
+//  Dados da Controladoria (Jan–Jul realizado + Ago–Dez projetado).
 //  Escopo isolado em IIFE → expõe apenas window.SC.
 // ═══════════════════════════════════════════════
 window.SC = (function () {
   'use strict';
 
-  const MESES      = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'];
-  const MESES_FULL = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'];
-  const MESES_F    = ['Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+  const MESES      = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'];
+  const MESES_FULL = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho'];
+  const MESES_F    = ['Ago', 'Set', 'Out', 'Nov', 'Dez'];
 
-  // ── Dados realizados (competência) — Jan a Jun/2026 ──
+  // ── Dados realizados (competência) — Jan a Jul/2026 ──
   const D = {
-    fat:      [535147.10, 505719.87, 601539.47, 670697.29, 636552.67, 660409.28],
-    recBruta: [531526.57, 486583.35, 581914.64, 645530.53, 593022.15, 630225.39],
-    rl:       [503869.83, 461987.52, 557081.14, 617673.68, 582064.04, 619659.03],
-    lb:       [341164.78, 290566.44, 376742.60, 408769.53, 397284.21, 414928.23],
-    mc:       [333152.07, 279730.31, 370829.16, 402246.73, 393002.68, 413373.57],
-    ebitda:   [40271.35, -41222.59, 60818.88, 96716.99, 108969.06, 128557.33],
-    ll:       [6041.17, -84236.14, 20360.42, 10943.43, 26373.99, 51998.28],
-    impFat:   [27656.74, 24595.83, 24833.50, 27856.85, 10958.11, 10566.36],
-    csp:      [162705.05, 171421.08, 180338.55, 208904.15, 184779.83, 204730.80],
-    despVar:  [8012.71, 10836.13, 5913.44, 6522.80, 4281.53, 1554.66],
-    pessoal8: [143479.04, 150827.16, 155402.03, 137319.56, 120657.86, 132189.92],
-    pj:       [40408.31, 44244.70, 38011.31, 43890.14, 35312.75, 32726.48],
-    ti:       [73868.91, 93396.94, 83959.70, 91865.88, 95353.96, 88491.17],
-    tribut:   [11771.38, 9955.74, 9929.06, 11140.27, 11914.48, 11251.57],
-    escrit:   [22585.23, 21796.15, 22039.06, 20613.77, 19804.40, 19133.02],
-    finFix:   [767.85, 732.21, 669.12, 700.12, 990.17, 1024.08],
-    invest:   [9413.74, 11072.88, 8178.31, 14496.81, 9312.68, 10787.27],
-    despFin:  [10496.28, 9565.87, 9617.63, 14168.60, 14437.89, 14241.22],
-    irCsll:   [22493.46, 22718.36, 22943.29, 58323.92, 58907.15, 59531.22],
-    resFin:   [-2322.98, -9222.31, -9336.86, -12952.83, -14375.24, -6240.56],
-    despFixas:[292880.72, 320952.90, 310010.28, 305529.74, 284033.62, 284816.24],
-    pessoal:  [310880.65, 312212.43, 326772.13, 353369.73, 302357.93, 333523.51],
-    caixa:    [315142.20, 230226.09, 251790.12, 263360.47, 290844.92, 345752.22],
+    fat:      [535147.10, 505719.87, 601539.47, 670697.29, 636552.67, 660409.28, 690940.34],
+    recBruta: [531526.57, 486583.35, 581914.64, 645530.53, 593022.15, 630225.39, 644830.17],
+    rl:       [503869.83, 461987.52, 557081.14, 617673.68, 582064.04, 619659.03, 633153.98],
+    lb:       [341164.78, 290566.44, 376742.60, 408769.53, 397284.21, 414928.23, 426233.80],
+    mc:       [333152.07, 279730.31, 370829.16, 402246.73, 393002.68, 413373.57, 423875.43],
+    ebitda:   [40271.35, -41222.59, 60818.88, 96716.99, 108969.06, 128557.33, 152729.47],
+    ll:       [6041.17, -84236.14, 20360.42, 10943.43, 26373.99, 51998.28, 76097.96],
+    impFat:   [27656.74, 24595.83, 24833.50, 27856.85, 10958.11, 10566.36, 11676.19],
+    csp:      [162705.05, 171421.08, 180338.55, 208904.15, 184779.83, 204730.80, 206920.19],
+    despVar:  [8012.71, 10836.13, 5913.44, 6522.80, 4281.53, 1554.66, 2358.37],
+    pessoal8: [143479.04, 150827.16, 155402.03, 137319.56, 120657.86, 132189.92, 119925.53],
+    pj:       [40408.31, 44244.70, 38011.31, 43890.14, 35312.75, 32726.48, 34882.56],
+    ti:       [73868.91, 93396.94, 83959.70, 91865.88, 95353.96, 88491.17, 84943.37],
+    tribut:   [11771.38, 9955.74, 9929.06, 11140.27, 11914.48, 11251.57, 10677.44],
+    escrit:   [22585.23, 21796.15, 22039.06, 20613.77, 19804.40, 19133.02, 19551.17],
+    finFix:   [767.85, 732.21, 669.12, 700.12, 990.17, 1024.08, 1165.89],
+    invest:   [9413.74, 11072.88, 8178.31, 14496.81, 9312.68, 10787.27, 4116.60],
+    despFin:  [10496.28, 9565.87, 9617.63, 14168.60, 14437.89, 14241.22, 14767.15],
+    irCsll:   [22493.46, 22718.36, 22943.29, 58323.92, 58907.15, 59531.22, 57748.20],
+    resFin:   [-2322.98, -9222.31, -9336.86, -12952.83, -14375.24, -6240.56, -14766.71],
+    despFixas:[292880.72, 320952.90, 310010.28, 305529.74, 284033.62, 284816.24, 271145.96],
+    pessoal:  [310880.65, 312212.43, 326772.13, 353369.73, 302357.93, 333523.51, 326845.72],
+    caixa:    [315142.20, 230226.09, 251790.12, 263360.47, 290844.92, 345752.22, 424524.06],
   };
 
-  // ── Forecast Jul–Dez/2026 ──
+  // ── Forecast Ago–Dez/2026 ──
   const F = {
-    fat:    [688614.87, 708614.87, 715701.02, 744329.06, 707112.61, 657614.72],
-    rl:     [626639.53, 644839.53, 651287.93, 677339.44, 643472.47, 598429.40],
-    ebitda: [140950.67, 146995.51, 157179.39, 165448.62, 119597.03, 77446.68],
-    ll:     [52612.67, 56615.37, 66165.20, 74945.19, 29031.30, -13754.46],
-    caixa:  [424524.06, 450845.46, 517010.66, 591955.85, 620987.15, 607232.69], // Jul já realizado (DFC/Lançamentos)
+    fat:    [708614.87, 715701.02, 744329.06, 707112.61, 657614.72],
+    rl:     [644839.53, 651287.93, 677339.44, 643472.47, 598429.40],
+    ebitda: [146995.51, 157179.39, 165448.62, 119597.03, 77446.68],
+    ll:     [56615.37, 66165.20, 74945.19, 29031.30, -13754.46],
+    caixa:  [450845.46, 517010.66, 591955.85, 620987.15, 607232.69],
   };
 
   const pct = (a, b) => a / b * 100;
@@ -80,7 +80,7 @@ window.SC = (function () {
   function byId(id) { return document.getElementById(id); }
 
   // ── Estado ──
-  let SEL = 5;          // mês de referência (0=Jan … 5=Jun)
+  let SEL = 6;          // mês de referência (0=Jan … 6=Jul)
   let WFMODE = 'mes';   // 'mes' | 'ytd'
 
   // ── KPIs executivos (farol vs média do ano) ──
@@ -91,12 +91,12 @@ window.SC = (function () {
     const ytdEB = pct(sumTo(D.ebitda, m), ytdRL), ytdLL = pct(sumTo(D.ll, m), ytdFat);
     const ytdHC = pct(sumTo(D.pessoal, m), ytdFat);
     const kpis = [
-      { label: 'Faturamento Bruto', val: fmtRk(D.fat[m]), ytd: 'YTD ' + fmtMi(ytdFat), delta: p >= 0 ? pct(D.fat[m] - D.fat[p], D.fat[p]) : null, good: 'high', avg: sum(D.fat) / 6, cur: D.fat[m] },
-      { label: '% Margem Bruta', val: fmtP(D.mbP[m]), ytd: 'YTD ' + fmtP(ytdMB), delta: p >= 0 ? D.mbP[m] - D.mbP[p] : null, pp: true, good: 'high', avg: sum(D.mbP) / 6, cur: D.mbP[m] },
-      { label: '% Margem Contrib.', val: fmtP(D.mcP[m]), ytd: 'YTD ' + fmtP(ytdMC), delta: p >= 0 ? D.mcP[m] - D.mcP[p] : null, pp: true, good: 'high', avg: sum(D.mcP) / 6, cur: D.mcP[m] },
-      { label: '% EBITDA', val: fmtP(D.ebP[m]), ytd: 'YTD ' + fmtP(ytdEB), delta: p >= 0 ? D.ebP[m] - D.ebP[p] : null, pp: true, good: 'high', avg: sum(D.ebP) / 6, cur: D.ebP[m] },
-      { label: '% Lucro Líquido', val: fmtP(D.llP[m]), ytd: 'YTD ' + fmtP(ytdLL), delta: p >= 0 ? D.llP[m] - D.llP[p] : null, pp: true, good: 'high', avg: sum(D.llP) / 6, cur: D.llP[m] },
-      { label: '% Headcount s/ Fat.', val: fmtP(D.hcP[m]), ytd: 'YTD ' + fmtP(ytdHC), delta: p >= 0 ? D.hcP[m] - D.hcP[p] : null, pp: true, good: 'low', avg: sum(D.hcP) / 6, cur: D.hcP[m] },
+      { label: 'Faturamento Bruto', val: fmtRk(D.fat[m]), ytd: 'YTD ' + fmtMi(ytdFat), delta: p >= 0 ? pct(D.fat[m] - D.fat[p], D.fat[p]) : null, good: 'high', avg: sum(D.fat) / 7, cur: D.fat[m] },
+      { label: '% Margem Bruta', val: fmtP(D.mbP[m]), ytd: 'YTD ' + fmtP(ytdMB), delta: p >= 0 ? D.mbP[m] - D.mbP[p] : null, pp: true, good: 'high', avg: sum(D.mbP) / 7, cur: D.mbP[m] },
+      { label: '% Margem Contrib.', val: fmtP(D.mcP[m]), ytd: 'YTD ' + fmtP(ytdMC), delta: p >= 0 ? D.mcP[m] - D.mcP[p] : null, pp: true, good: 'high', avg: sum(D.mcP) / 7, cur: D.mcP[m] },
+      { label: '% EBITDA', val: fmtP(D.ebP[m]), ytd: 'YTD ' + fmtP(ytdEB), delta: p >= 0 ? D.ebP[m] - D.ebP[p] : null, pp: true, good: 'high', avg: sum(D.ebP) / 7, cur: D.ebP[m] },
+      { label: '% Lucro Líquido', val: fmtP(D.llP[m]), ytd: 'YTD ' + fmtP(ytdLL), delta: p >= 0 ? D.llP[m] - D.llP[p] : null, pp: true, good: 'high', avg: sum(D.llP) / 7, cur: D.llP[m] },
+      { label: '% Headcount s/ Fat.', val: fmtP(D.hcP[m]), ytd: 'YTD ' + fmtP(ytdHC), delta: p >= 0 ? D.hcP[m] - D.hcP[p] : null, pp: true, good: 'low', avg: sum(D.hcP) / 7, cur: D.hcP[m] },
     ];
     const grid = byId('scKpis'); if (!grid) return;
     grid.innerHTML = kpis.map(k => {
@@ -266,7 +266,7 @@ window.SC = (function () {
       { l: 'Faturamento projetado 2026', v: fmtMi(ANO.fat), s: `${fmtMi(sum(D.fat))} realizado + ${fmtMi(sum(F.fat))} projetado`, f: 'g' },
       { l: 'EBITDA projetado 2026', v: fmtSmart(ANO.eb), s: `${fmtP(ANO.ebP)} da Receita Líquida do ano`, f: 'g' },
       { l: 'Lucro Líquido projetado 2026', v: fmtRk(ANO.ll), s: `${fmtP(ANO.llP)} do faturamento · dez projeta −R$ 14 mil`, f: ANO.ll >= 0 ? 'g' : 'y' },
-      { l: 'Caixa em Dez/26', v: fmtRk(F.caixa[5]), s: 'Pico de R$ 621 mil em Nov/26', f: 'g' },
+      { l: 'Caixa em Dez/26', v: fmtRk(F.caixa[4]), s: 'Pico de R$ 621 mil em Nov/26', f: 'g' },
     ];
     g.innerHTML = items.map(it => `<div class="sc-kpi">
       <div class="sc-kpi-label"><span>${it.l}</span><span class="sc-farol ${it.f}"></span></div>
@@ -279,7 +279,7 @@ window.SC = (function () {
     const c = byId('scFcChart'); if (!c) return; c.innerHTML = '';
     const M12 = MESES.concat(MESES_F);
     const fat12 = D.fat.concat(F.fat), eb12 = D.ebP.concat(F.ebP);
-    const w = 1140, h = 320, padL = 64, padR = 52, padT = 20, padB = 30, n = 12, cut = 6;
+    const w = 1140, h = 320, padL = 64, padR = 52, padT = 20, padB = 30, n = 12, cut = 7;
     const max = niceMax(Math.max(...fat12));
     const eMin = -12, eMax = 26;
     const s = svgEl(w, h);
@@ -316,8 +316,8 @@ window.SC = (function () {
     const c = byId('scFcCaixa'); if (!c) return; c.innerHTML = '';
     const M12 = MESES.concat(MESES_F);
     const cx12 = D.caixa.concat(F.caixa);
-    const w = 560, h = 270, padL = 64, padR = 16, padT = 24, padB = 30, n = 12, cut = 6;
-    const min = 200000, max = 580000;
+    const w = 560, h = 270, padL = 64, padR = 16, padT = 24, padB = 30, n = 12, cut = 7;
+    const min = 200000, max = 650000;
     const s = svgEl(w, h);
     const x = i => padL + i * (w - padL - padR) / (n - 1);
     const y = v => padT + (h - padT - padB) * (1 - (v - min) / (max - min));
@@ -340,7 +340,7 @@ window.SC = (function () {
     const c = byId('scFcLL'); if (!c) return; c.innerHTML = '';
     const M12 = MESES.concat(MESES_F);
     const ll12 = D.ll.concat(F.ll);
-    const w = 560, h = 270, padL = 58, padR = 14, padT = 20, padB = 30, n = 12, cut = 6;
+    const w = 560, h = 270, padL = 58, padR = 14, padT = 20, padB = 30, n = 12, cut = 7;
     const min = -100000, max = 60000;
     const s = svgEl(w, h);
     const x = i => padL + i * (w - padL - padR) / n + (w - padL - padR) / n * 0.16;

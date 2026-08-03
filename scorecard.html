@@ -156,7 +156,7 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
 <div class="topbar">
   <div class="topbar-inner">
     <div class="brand"><span class="dot"></span><div>ECGNow<small>Scorecard · Controladoria 2026</small></div></div>
-    <span class="period-chip">Realizado Jan – Jun 2026 · Balanços até Jun/26 · Caixa até Jul/26</span>
+    <span class="period-chip">Realizado Jan – Jul 2026 · Balanços até Jun/26 · DFC até Jul/26</span>
     <label class="mes-sel">Mês de referência
       <select id="mesSel" onchange="setMes(+this.value)">
         <option value="0">Janeiro/26</option>
@@ -164,7 +164,8 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
         <option value="2">Março/26</option>
         <option value="3">Abril/26</option>
         <option value="4">Maio/26</option>
-        <option value="5" selected>Junho/26</option>
+        <option value="5">Junho/26</option>
+        <option value="6" selected>Julho/26</option>
       </select>
     </label>
     <nav class="nav">
@@ -236,12 +237,12 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
 
 <!-- ===================== 2. DESEMPENHO ===================== -->
 <section id="desempenho">
-  <div class="sec-head"><h2>Desempenho Mensal</h2><span class="tag">Jan – Mai 2026</span></div>
+  <div class="sec-head"><h2>Desempenho Mensal</h2><span class="tag">Jan – Jul 2026</span></div>
   <p class="sec-sub">Receita e rentabilidade em uma única leitura: faturamento bruto (barras) contra a curva de EBITDA. Abaixo, a trajetória das três margens da DRE.</p>
   <div class="grid g-2">
     <div class="card chart-card">
       <h3>Faturamento Bruto × % EBITDA</h3>
-      <div class="hint">Fev/26 concentra o único resultado operacional negativo do ano; desde então o EBITDA cresce por 4 meses seguidos, atingindo o recorde de 20,7% em jun/26.</div>
+      <div class="hint">Fev/26 concentra o único resultado operacional negativo do ano; desde então o EBITDA cresce por 5 meses seguidos, atingindo o recorde de 24,1% em jul/26.</div>
       <div class="legend"><span><i style="background:var(--navy2)"></i>Faturamento Bruto (R$)</span><span><i style="background:var(--cyan)"></i>% EBITDA</span></div>
       <div id="comboChart"></div>
     </div>
@@ -293,8 +294,8 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
 
 <!-- ===================== 4. EXAMES ===================== -->
 <section id="exames">
-  <div class="sec-head"><h2>Progresso de Exames · TD × SAAS</h2><span class="tag">Volume, receita e rentabilidade</span></div>
-  <p class="sec-sub">Evolução mensal de volume e valor faturado por linha de negócio, mix de receita do ano e margem bruta por linha.</p>
+  <div class="sec-head"><h2>Progresso de Exames · TD × SAAS</h2><span class="tag">Volume, receita e rentabilidade · dados até Jun/26</span></div>
+  <p class="sec-sub">Evolução mensal de volume e valor faturado por linha de negócio, mix de receita do ano e margem bruta por linha. <b>Jul/26 pendente:</b> a quebra por linha (TD/SAAS/Comodato) ainda não fecha na planilha de origem para o mês.</p>
   <div class="grid g-2" style="margin-bottom:16px">
     <div class="card chart-card">
       <h3>Exames Faturados por mês</h3>
@@ -335,7 +336,7 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
   <div class="grid g-2">
     <div class="card chart-card">
       <h3>Receita Líquida × Ponto de Equilíbrio (R$)</h3>
-      <div class="hint">Em fev/26 a receita ficou abaixo do PE (margem de segurança −14,7%). Em jun/26 a folga é a maior do ano: 31,1%.</div>
+      <div class="hint">Em fev/26 a receita ficou abaixo do PE (margem de segurança −14,7%). Em jul/26 a folga é a maior do ano: 36,0%.</div>
       <div class="legend"><span><i style="background:var(--cyan)"></i>Receita Líquida</span><span><i style="background:var(--bad)"></i>Ponto de Equilíbrio</span></div>
       <div id="beChart"></div>
     </div>
@@ -396,30 +397,30 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
 
 <!-- ===================== 7b. FORECAST 2026 ===================== -->
 <section id="forecast">
-  <div class="sec-head"><h2>Forecast 2026</h2><span class="tag">Realizado Jan–Jun + Projetado Jul–Dez</span></div>
-  <p class="sec-sub">Visão dos 12 meses consolidando o realizado oficial da DRE (Jan–Jun) com o forecast da companhia (Jul–Dez). Barras e linhas sólidas = realizado; tonalidade clara e tracejado = projetado. Percentuais recalculados na convenção do scorecard (EBITDA sobre Receita Líquida).</p>
+  <div class="sec-head"><h2>Forecast 2026</h2><span class="tag">Realizado Jan–Jul + Projetado Ago–Dez</span></div>
+  <p class="sec-sub">Visão dos 12 meses consolidando o realizado oficial da DRE (Jan–Jul) com o forecast da companhia (Ago–Dez). Barras e linhas sólidas = realizado; tonalidade clara e tracejado = projetado. Percentuais recalculados na convenção do scorecard (EBITDA sobre Receita Líquida).</p>
   <div class="grid g-4" style="margin-bottom:16px" id="fcKpis"></div>
   <div class="card chart-card" style="margin-bottom:16px">
     <h3>Faturamento Bruto × % EBITDA · 12 meses</h3>
-    <div class="hint">Com junho já realizado (20,7% de EBITDA), o forecast projeta um 2º semestre forte: EBITDA de 22–24% de julho a outubro, com pico de faturamento de R$ 744 mil em outubro; nov–dez desaceleram (12,9% em dezembro).</div>
+    <div class="hint">Com julho já realizado (24,1% de EBITDA, recorde do ano), o forecast projeta agosto–outubro entre 23% e 24% de EBITDA, com pico de faturamento de R$ 744 mil em outubro; nov–dez desaceleram (12,9% em dezembro).</div>
     <div class="legend"><span><i style="background:#0a3d6e"></i>Faturamento realizado</span><span><i style="background:#9dc3e0"></i>Faturamento projetado</span><span><i style="background:#10b981"></i>% EBITDA</span></div>
     <div id="fcChart"></div>
   </div>
   <div class="grid g-2" style="margin-bottom:16px">
     <div class="card chart-card">
       <h3>Trajetória de Caixa projetada (R$)</h3>
-      <div class="hint">O caixa sobe de forma consistente até o pico de R$ 621 mil em novembro e encerra o ano em R$ 607 mil — R$ 261 mil acima da posição de junho (R$ 346 mil).</div>
+      <div class="hint">O caixa sobe de forma consistente até o pico de R$ 621 mil em novembro e encerra o ano em R$ 607 mil — R$ 182,7 mil acima da posição de julho (R$ 424,5 mil).</div>
       <div id="fcCaixa"></div>
     </div>
     <div class="card chart-card">
       <h3>Lucro Líquido mensal (R$)</h3>
-      <div class="hint">Junho realizou R$ 52 mil de lucro; jul–out projetam mais R$ 250 mil somados. Dezembro segue negativo (−R$ 14 mil) com 13º salário e impostos cheios.</div>
+      <div class="hint">Julho realizou R$ 76 mil de lucro; ago–out projetam mais R$ 198 mil somados. Dezembro segue negativo (−R$ 14 mil) com 13º salário e impostos cheios.</div>
       <div id="fcLL"></div>
     </div>
   </div>
   <div class="grid g-2">
-    <div class="insight"><div class="ico g">☀️</div><div><b>O 2º semestre carrega o ano e o resultado já virou.</b><p>Junho fechou com EBITDA recorde de 20,7% e R$ 52 mil de lucro — o melhor mês do ano. Jul–out projetam EBITDA entre 22% e 24%, com pico de faturamento de R$ 744 mil em outubro. O lucro líquido projetado do ano sobe para R$ 297 mil (3,8% do faturamento).</p></div></div>
-    <div class="insight"><div class="ico y">🧊</div><div><b>Dezembro segue deficitário e mantém viva a tese do Lucro Real.</b><p>Dezembro projeta −R$ 14 mil de lucro líquido mesmo com faturamento de R$ 658 mil: o 13º salário e IRPJ+CSLL de ~R$ 60 mil no Presumido consomem todo o resultado do mês. Com o lucro anual agora positivo em R$ 297 mil, a comparação Presumido × Real fica ainda mais relevante para 2027.</p></div></div>
+    <div class="insight"><div class="ico g">☀️</div><div><b>O 2º semestre carrega o ano e o resultado já virou.</b><p>Julho fechou com EBITDA recorde de 24,1% e R$ 76 mil de lucro — o melhor mês do ano. Ago–out projetam EBITDA entre 23% e 24%, com pico de faturamento de R$ 744 mil em outubro. O lucro líquido projetado do ano sobe para R$ 320,6 mil (4,1% do faturamento).</p></div></div>
+    <div class="insight"><div class="ico y">🧊</div><div><b>Dezembro segue deficitário e mantém viva a tese do Lucro Real.</b><p>Dezembro projeta −R$ 14 mil de lucro líquido mesmo com faturamento de R$ 658 mil: o 13º salário e IRPJ+CSLL de ~R$ 60 mil no Presumido consomem todo o resultado do mês. Com o lucro anual agora positivo em R$ 320,6 mil, a comparação Presumido × Real fica ainda mais relevante para 2027.</p></div></div>
   </div>
 </section>
 
@@ -428,15 +429,15 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
   <div class="sec-head"><h2>Leitura Executiva</h2><span class="tag">O que os números dizem</span></div>
   <div class="grid g-2">
     <div>
-      <div class="insight"><div class="ico g">📈</div><div><b>Trajetória de rentabilidade é o destaque do ano.</b><p>O EBITDA saiu de −8,9% em fevereiro para 20,7% em junho — recorde de 2026 — com quatro meses seguidos de expansão. A margem de contribuição de 67,5% em maio segue como a melhor do ano, e o lucro líquido do 1º semestre virou positivo (R$ 31,5 mil).</p></div></div>
-      <div class="insight"><div class="ico g">🛡️</div><div><b>Risco operacional em queda.</b><p>O ponto de equilíbrio caiu de R$ 530 mil (fev) para R$ 427 mil (jun), com despesas fixas estáveis e margem de contribuição alta (66,7%). A margem de segurança de 31,1% em junho é a maior folga do ano.</p></div></div>
+      <div class="insight"><div class="ico g">📈</div><div><b>Trajetória de rentabilidade é o destaque do ano.</b><p>O EBITDA saiu de −8,9% em fevereiro para 24,1% em julho — recorde de 2026 — com cinco meses seguidos de expansão. A margem de contribuição de 67,5% em maio segue como a melhor do ano, e o lucro líquido acumulado (jan–jul) soma R$ 107,6 mil.</p></div></div>
+      <div class="insight"><div class="ico g">🛡️</div><div><b>Risco operacional em queda.</b><p>O ponto de equilíbrio caiu de R$ 530 mil (fev) para R$ 405 mil (jul), com despesas fixas em queda (−4,8% no mês) e margem de contribuição alta (66,9%). A margem de segurança de 36,0% em julho é a maior folga do ano.</p></div></div>
       <div class="insight"><div class="ico b">🔬</div><div><b>SAAS cresce acima do TD e sustenta margem superior.</b><p>O valor faturado SAAS subiu 23,4% entre jan e jun (vs. +25,1% no TD) e a linha entregou margem bruta de até 75,5% (abr). Mensalidades SAAS também crescem: de R$ 5,4 mil para R$ 7,5 mil/mês.</p></div></div>
       <div class="insight"><div class="ico g">⚡</div><div><b>Eficiência de pessoal melhorou 7,6 p.p. no ano.</b><p>O custo total de pessoas caiu de 58,1% do faturamento (jan) para 50,5% (jun); maio foi o piso do ano (47,5%). A eficiência se sustenta mesmo com o volume recorde de exames no 2º trimestre.</p></div></div>
     </div>
     <div>
-      <div class="insight"><div class="ico y">⚖️</div><div><b>Carga tributária pressiona o lucro líquido.</b><p>IRPJ+CSLL saltaram de ~R$ 22,9 mil/mês (Q1) para ~R$ 59 mil/mês desde abril pelo Lucro Presumido. Em junho consumiram 53% do LAIR de R$ 111,5 mil. A avaliação de migração para Lucro Real segue como principal alavanca fiscal.</p></div></div>
+      <div class="insight"><div class="ico y">⚖️</div><div><b>Carga tributária pressiona o lucro líquido, mas alivia em julho.</b><p>IRPJ+CSLL saltaram de ~R$ 22,9 mil/mês (Q1) para ~R$ 59 mil/mês desde abril pelo Lucro Presumido. Em julho consumiram 43% do LAIR de R$ 133,8 mil, ante 53% em junho. A avaliação de migração para Lucro Real segue como principal alavanca fiscal.</p></div></div>
       <div class="insight"><div class="ico r">🏛️</div><div><b>Patrimônio líquido piora em junho, na contramão do lucro do mês.</b><p>Após subir de −R$ 69,0 mil (mar) para −R$ 4,5 mil (mai), o PL fechou junho em −R$ 14,7 mil (−R$ 10,2 mil no mês), apesar do lucro operacional de R$ 52 mil no período. A divergência sugere ajustes contábeis (provisões, IRPJ/CSLL) não capturados na DRE gerencial e merece conciliação com a Simétrica.</p></div></div>
-      <div class="insight"><div class="ico r">📉</div><div><b>Fevereiro segue como o ponto fora da curva.</b><p>Único mês com prejuízo (−R$ 84,2 mil): menor faturamento do ano, margem bruta de 62,9% e despesas fixas no pico (R$ 321 mil, incluindo rescisão de R$ 20,4 mil). O 1º semestre absorveu esse efeito e ainda assim fechou positivo: lucro líquido YTD de +R$ 31,5 mil.</p></div></div>
+      <div class="insight"><div class="ico r">📉</div><div><b>Fevereiro segue como o ponto fora da curva.</b><p>Único mês com prejuízo (−R$ 84,2 mil): menor faturamento do ano, margem bruta de 62,9% e despesas fixas no pico (R$ 321 mil, incluindo rescisão de R$ 20,4 mil). O acumulado do ano absorveu esse efeito e segue positivo: lucro líquido YTD (jan–jul) de +R$ 107,6 mil.</p></div></div>
       <div class="insight"><div class="ico b">💧</div><div><b>Liquidez confortável e recebimento ágil.</b><p>Liquidez corrente de 1,96 e prazo médio de recebimento de apenas 10,7 dias em junho. O capital circulante líquido de R$ 282,2 mil cobre 4,7 meses de IRPJ+CSLL correntes.</p></div></div>
     </div>
   </div>
@@ -444,7 +445,8 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
 
 <div class="foot">
   Scorecard Financeiro ECGNow Medicina Diagnóstica Ltda · CNPJ 23.154.712/0001-60 · Elaborado pela Controladoria — Jul/2026<br>
-  Fontes: Demonstrativo_Anual e Headcount (Dashboard Financeiro 2026) · Balanços Patrimoniais Jan–Jun/26 (Simétrica Assessoria Contábil) · DFC de Jul/26 apurado a partir da aba Lançamentos · Forecast_2026 (FORECAST26).<br>
+  Fontes: Demonstrativo_Anual (Dashboard Financeiro 2026), fechamento de Jul/26 · Balanços Patrimoniais Jan–Jun/26 (Simétrica Assessoria Contábil) · Caixa/DFC de Jul/26 (aba Lançamentos) · Forecast_2026 (FORECAST26), Ago–Dez.<br>
+  Ressalvas: (1) Custo total de pessoas de Jul/26 é estimativa (Pessoal 8.0 + CSP) — a aba Headcount ainda não fechou o mês. (2) Volume/mix de exames (TD·SAAS·Comodato) segue em Jun/26; a quebra por linha para Jul/26 ainda não fecha na planilha de origem. (3) Balanço patrimonial mais recente é o de Jun/26; o fechamento contábil de julho ainda não foi recebido da Simétrica.<br>
   Convenções: Margem Bruta, M. Contribuição e EBITDA calculados sobre a Receita Líquida; % Lucro Líquido e % Headcount sobre o Faturamento Bruto, conforme DRE gerencial oficial.
 </div>
 </div>
@@ -455,36 +457,38 @@ tr.total td{background:#f1f7fc;font-weight:800;border-top:2px solid var(--line)}
    BASE DE DADOS — valores extraídos da DRE gerencial (aba
    Demonstrativo_Anual), aba Headcount e balanços contábeis.
    ============================================================ */
-const MESES = ['Jan','Fev','Mar','Abr','Mai','Jun'];
-const MESES_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho'];
-let SEL = 5;          // índice do mês de referência (0=Jan ... 5=Jun)
+const MESES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul'];
+const MESES_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho'];
+let SEL = 6;          // índice do mês de referência (0=Jan ... 6=Jul)
 let WFMODE = 'mes';   // modo da cascata: 'mes' ou 'ytd'
 const D = {
-  fat:   [535147.10, 505719.87, 601539.47, 670697.29, 636552.67, 660409.28],
-  recBruta:[531526.57, 486583.35, 581914.64, 645530.53, 593022.15, 630225.39], // competência (base da DRE)
-  rl:    [503869.83, 461987.52, 557081.14, 617673.68, 582064.04, 619659.03],
-  lb:    [341164.78, 290566.44, 376742.60, 408769.53, 397284.21, 414928.23],
-  mc:    [333152.07, 279730.31, 370829.16, 402246.73, 393002.68, 413373.57],
-  ebitda:[40271.35, -41222.59, 60818.88, 96716.99, 108969.06, 128557.33],
-  ll:    [6041.17, -84236.14, 20360.42, 10943.43, 26373.99, 51998.28],
+  fat:   [535147.10, 505719.87, 601539.47, 670697.29, 636552.67, 660409.28, 690940.34],
+  recBruta:[531526.57, 486583.35, 581914.64, 645530.53, 593022.15, 630225.39, 644830.17], // competência (base da DRE)
+  rl:    [503869.83, 461987.52, 557081.14, 617673.68, 582064.04, 619659.03, 633153.98],
+  lb:    [341164.78, 290566.44, 376742.60, 408769.53, 397284.21, 414928.23, 426233.80],
+  mc:    [333152.07, 279730.31, 370829.16, 402246.73, 393002.68, 413373.57, 423875.43],
+  ebitda:[40271.35, -41222.59, 60818.88, 96716.99, 108969.06, 128557.33, 152729.47],
+  ll:    [6041.17, -84236.14, 20360.42, 10943.43, 26373.99, 51998.28, 76097.96],
   // Despesas por categoria (DRE gerencial)
-  impFat:[27656.74, 24595.83, 24833.50, 27856.85, 10958.11, 10566.36],
-  csp:   [162705.05, 171421.08, 180338.55, 208904.15, 184779.83, 204730.80],
-  despVar:[8012.71, 10836.13, 5913.44, 6522.80, 4281.53, 1554.66],
-  pessoal8:[143479.04, 150827.16, 155402.03, 137319.56, 120657.86, 132189.92],
-  pj:    [40408.31, 44244.70, 38011.31, 43890.14, 35312.75, 32726.48],
-  ti:    [73868.91, 93396.94, 83959.70, 91865.88, 95353.96, 88491.17],
-  tribut:[11771.38, 9955.74, 9929.06, 11140.27, 11914.48, 11251.57],
-  escrit:[22585.23, 21796.15, 22039.06, 20613.77, 19804.40, 19133.02],
-  finFix:[767.85, 732.21, 669.12, 700.12, 990.17, 1024.08],
-  invest:[9413.74, 11072.88, 8178.31, 14496.81, 9312.68, 10787.27],
-  despFin:[10496.28, 9565.87, 9617.63, 14168.60, 14437.89, 14241.22],
-  irCsll:[22493.46, 22718.36, 22943.29, 58323.92, 58907.15, 59531.22],
-  resFin:[-2322.98, -9222.31, -9336.86, -12952.83, -14375.24, -6240.56],
-  despFixas:[292880.72, 320952.90, 310010.28, 305529.74, 284033.62, 284816.24],
-  pessoal:[310880.65, 312212.43, 326772.13, 353369.73, 302357.93, 333523.51], // custo total de pessoas (base DRE)
-  caixa: [315142.20, 230226.09, 251790.12, 263360.47, 290844.92, 345752.22],
-  gerCaixa:[6041.17, -84916.11, 21564.03, 11570.35, 27484.46, 54907.30],
+  impFat:[27656.74, 24595.83, 24833.50, 27856.85, 10958.11, 10566.36, 11676.19],
+  csp:   [162705.05, 171421.08, 180338.55, 208904.15, 184779.83, 204730.80, 206920.19],
+  despVar:[8012.71, 10836.13, 5913.44, 6522.80, 4281.53, 1554.66, 2358.37],
+  pessoal8:[143479.04, 150827.16, 155402.03, 137319.56, 120657.86, 132189.92, 119925.53],
+  pj:    [40408.31, 44244.70, 38011.31, 43890.14, 35312.75, 32726.48, 34882.56],
+  ti:    [73868.91, 93396.94, 83959.70, 91865.88, 95353.96, 88491.17, 84943.37],
+  tribut:[11771.38, 9955.74, 9929.06, 11140.27, 11914.48, 11251.57, 10677.44],
+  escrit:[22585.23, 21796.15, 22039.06, 20613.77, 19804.40, 19133.02, 19551.17],
+  finFix:[767.85, 732.21, 669.12, 700.12, 990.17, 1024.08, 1165.89],
+  invest:[9413.74, 11072.88, 8178.31, 14496.81, 9312.68, 10787.27, 4116.60],
+  despFin:[10496.28, 9565.87, 9617.63, 14168.60, 14437.89, 14241.22, 14767.15],
+  irCsll:[22493.46, 22718.36, 22943.29, 58323.92, 58907.15, 59531.22, 57748.20],
+  resFin:[-2322.98, -9222.31, -9336.86, -12952.83, -14375.24, -6240.56, -14766.71],
+  despFixas:[292880.72, 320952.90, 310010.28, 305529.74, 284033.62, 284816.24, 271145.96],
+  // Custo total de pessoas (base DRE, fonte: aba Headcount). Jul/26 é ESTIMATIVA
+  // (Pessoal 8.0 + CSP) — a aba Headcount ainda não fechou o mês (ver nota no rodapé).
+  pessoal:[310880.65, 312212.43, 326772.13, 353369.73, 302357.93, 333523.51, 326845.72],
+  caixa: [315142.20, 230226.09, 251790.12, 263360.47, 290844.92, 345752.22, 424524.06],
+  gerCaixa:[6041.17, -84916.11, 21564.03, 11570.35, 27484.46, 54907.30, 78771.84],
   exTD:  [30328, 30788, 38067, 40735, 38723, 38132],
   exSAAS:[8178, 8544, 8379, 10260, 9385, 10327],
   exCom: [131, 200, 190, 303, 196, 240],
@@ -495,6 +499,8 @@ const D = {
   mbTD:  [64.2, 57.2, 66.2, 60.5, 64.9, 63.3],
   mbSAAS:[69.9, 67.3, 60.5, 75.5, 66.0, 67.9],
   mbEDU: [-75.1, 22.4, 16.7, 1.6, 28.9, 48.1]
+  // Exames (volume/mix TD·SAAS·Comodato) seguem em Jun/26: a aba de origem
+  // ainda não fecha a quebra por linha para Jul/26 (fórmulas retornam #N/A).
 };
 // Derivados ---------------------------------------------------
 const pct=(a,b)=>a/b*100;
@@ -544,8 +550,8 @@ function sparkline(vals,color,selIdx){
 // Barras agrupadas/empilhadas genéricas
 function stackedBars(container,series,colors,fmt,opts={}){
   const w=560,h=270,padL=64,padR=14,padT=14,padB=30;
-  const n=MESES.length;
-  const totals=MESES.map((_,i)=>sum(series.map(s=>s[i])));
+  const n=series[0].length;
+  const totals=Array.from({length:n},(_,i)=>sum(series.map(s=>s[i])));
   const max=niceMax(Math.max(...totals));
   const s=svgEl(w,h);
   const x=i=>padL+i*(w-padL-padR)/n + (w-padL-padR)/n*0.18;
@@ -554,14 +560,16 @@ function stackedBars(container,series,colors,fmt,opts={}){
   for(let g=0;g<=4;g++){const v=max*g/4;
     s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
     s.appendChild(el('text',{x:padL-8,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},opts.axisFmt?opts.axisFmt(v):fmt(v)));}
-  MESES.forEach((m,i)=>{
+  for(let i=0;i<n;i++){
+    const m=MESES[i];
     let acc=0;
     series.forEach((sr,si)=>{
       const v=sr[i];const yTop=y(acc+v),yBot=y(acc);
       s.appendChild(el('rect',{x:x(i),y:yTop,width:bw,height:Math.max(yBot-yTop,0),fill:colors[si],rx:si===series.length-1?5:0}));
       acc+=v;});
     s.appendChild(el('text',{x:x(i)+bw/2,y:y(acc)-6,'text-anchor':'middle','font-size':10.5,'font-weight':800,fill:'#0D2137'},fmt(acc)));
-    s.appendChild(el('text',{x:x(i)+bw/2,y:h-8,'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#5b7187'},m));});
+    s.appendChild(el('text',{x:x(i)+bw/2,y:h-8,'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#5b7187'},m));
+  }
   container.appendChild(s);
 }
 
@@ -870,7 +878,9 @@ function renderResumo(){
   document.getElementById('rsEbitda').innerHTML=`${fmtRk(D.ebitda[i])} <small>${fmtP(D.ebP[i])}</small>`;
   document.getElementById('rsLL').innerHTML=`${fmtRk(D.ll[i])} <small>${fmtP(D.llP[i])}</small>`;
   document.getElementById('rsCaixa').innerHTML=fmtRk(D.caixa[i]);
-  document.getElementById('rsExames').innerHTML=`${fmtN(D.exTot[i])} <small>R$ ${D.ticket[i].toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}/exame</small>`;
+  const iExam = i<D.exTot.length ? i : D.exTot.length-1;
+  const examNote = iExam===i ? '' : ` <small style="opacity:.65">(${MESES[iExam]}/26)</small>`;
+  document.getElementById('rsExames').innerHTML=`${fmtN(D.exTot[iExam])} <small>R$ ${D.ticket[iExam].toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}/exame</small>${examNote}`;
   // Chips de margens
   const chips=[
     {l:'Margem Bruta',v:D.mbP,good:'high'},
@@ -974,16 +984,16 @@ document.querySelectorAll('.nav a[href^="#"]').forEach(a=>a.addEventListener('cl
 window.addEventListener('resize',fitResumo);
 
 /* ============================================================
-   FORECAST 2026 — projetado Jul–Dez (aba FORECAST26 revisada)
-   Realizado oficial Jan–Jun (DRE) + forecast Jul–Dez
+   FORECAST 2026 — projetado Ago–Dez (aba FORECAST26 revisada)
+   Realizado oficial Jan–Jul (DRE) + forecast Ago–Dez
    ============================================================ */
-const MESES_F=['Jul','Ago','Set','Out','Nov','Dez'];
+const MESES_F=['Ago','Set','Out','Nov','Dez'];
 const F={
-  fat:   [688614.87, 708614.87, 715701.02, 744329.06, 707112.61, 657614.72],
-  rl:    [626639.53, 644839.53, 651287.93, 677339.44, 643472.47, 598429.40],
-  ebitda:[140950.67, 146995.51, 157179.39, 165448.62, 119597.03, 77446.68],
-  ll:    [52612.67, 56615.37, 66165.20, 74945.19, 29031.30, -13754.46],
-  caixa: [424524.06, 450845.46, 517010.66, 591955.85, 620987.15, 607232.69] // Jul já realizado (DFC/Lançamentos); Ago–Dez seguem projetados
+  fat:   [708614.87, 715701.02, 744329.06, 707112.61, 657614.72],
+  rl:    [644839.53, 651287.93, 677339.44, 643472.47, 598429.40],
+  ebitda:[146995.51, 157179.39, 165448.62, 119597.03, 77446.68],
+  ll:    [56615.37, 66165.20, 74945.19, 29031.30, -13754.46],
+  caixa: [450845.46, 517010.66, 591955.85, 620987.15, 607232.69]
 };
 F.ebP=F.ebitda.map((v,i)=>pct(v,F.rl[i]));
 // Totais consolidados do ano
@@ -1003,7 +1013,7 @@ function renderForecast(){
     {l:'Faturamento projetado 2026',v:fmtMi(ANO.fat),s:`${fmtMi(sum(D.fat))} realizado + ${fmtMi(sum(F.fat))} projetado`,f:'g'},
     {l:'EBITDA projetado 2026',v:fmtSmart(ANO.eb),s:`${fmtP(ANO.ebP)} da Receita Líquida do ano`,f:'g'},
     {l:'Lucro Líquido projetado 2026',v:fmtSmart(ANO.ll),s:`${fmtP(ANO.llP)} do faturamento · dez projeta −R$ 14 mil`,f:ANO.ll>=0?'g':'y'},
-    {l:'Caixa em Dez/26',v:fmtRk(F.caixa[5]),s:'Pico de R$ 621 mil em Nov/26',f:'g'}
+    {l:'Caixa em Dez/26',v:fmtRk(F.caixa[F.caixa.length-1]),s:'Pico de R$ 621 mil em Nov/26',f:'g'}
   ];
   const g=document.getElementById('fcKpis');g.innerHTML='';
   items.forEach(it=>{
@@ -1100,7 +1110,7 @@ function renderForecast(){
   // ---- Linha de projeção na capa ----
   document.getElementById('rsProj').innerHTML=
     `<span class="pl">Projeção de fechamento 2026 · forecast</span>
-     Faturamento <b>${fmtMi(ANO.fat)}</b> · EBITDA <b>${fmtSmart(ANO.eb)} (${fmtP(ANO.ebP)})</b> · caixa dez <b>${fmtRk(F.caixa[5])}</b>`;
+     Faturamento <b>${fmtMi(ANO.fat)}</b> · EBITDA <b>${fmtSmart(ANO.eb)} (${fmtP(ANO.ebP)})</b> · caixa dez <b>${fmtRk(F.caixa[F.caixa.length-1])}</b>`;
 }
 
 /* ---------- Inicialização ---------- */
@@ -1172,9 +1182,10 @@ stackedBars(document.getElementById('examValChart'),
 // Heatmap de margem bruta por linha
 (function(){
   const rows=[{n:'Telediagnóstico',d:D.mbTD},{n:'SAAS',d:D.mbSAAS},{n:'Educação',d:D.mbEDU}];
-  const w=360,h=250,padL=104,padT=36,cw=(w-padL-12)/MESES.length,ch=44;
+  const nCols=D.mbTD.length;
+  const w=360,h=250,padL=104,padT=36,cw=(w-padL-12)/nCols,ch=44;
   const s=svgEl(w,h);
-  MESES.forEach((m,i)=>s.appendChild(el('text',{x:padL+i*cw+cw/2,y:padT-10,'text-anchor':'middle','font-size':10.5,'font-weight':800,fill:'#5b7187'},m)));
+  for(let i=0;i<nCols;i++) s.appendChild(el('text',{x:padL+i*cw+cw/2,y:padT-10,'text-anchor':'middle','font-size':10.5,'font-weight':800,fill:'#5b7187'},MESES[i]));
   rows.forEach((r,ri)=>{
     s.appendChild(el('text',{x:padL-10,y:padT+ri*(ch+8)+ch/2+4,'text-anchor':'end','font-size':11,'font-weight':800,fill:'#0D2137'},r.n));
     r.d.forEach((v,ci)=>{
@@ -1256,27 +1267,21 @@ lineChart(document.getElementById('beChart'),
 /* ============================================================
    7. CAIXA
    ============================================================ */
-/* Jul/26 incorporado apenas nos gráficos de Caixa, a partir do DFC
-   (aba Lançamentos): Geração de Caixa = Entradas − Saídas realizadas.
-   Arrays locais para não afetar D (usado por Visão Executiva/Forecast). */
-const MESES_CX=MESES.concat(['Jul']);
-const caixaCX=D.caixa.concat([424524.06]);
-const gerCaixaCX=D.gerCaixa.concat([78771.84]);
 (function(){
   const c=document.getElementById('cashChart');
   const w=560,h=270,padL=64,padR=14,padT=22,padB=30;
-  const min=200000,max=440000,NL=caixaCX.length-1;
+  const min=200000,max=440000,NL=D.caixa.length-1;
   const s=svgEl(w,h);
   const x=i=>padL+i*(w-padL-padR)/NL;
   const y=v=>padT+(h-padT-padB)*(1-(v-min)/(max-min));
   [200000,280000,360000,440000].forEach(v=>{s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
     s.appendChild(el('text',{x:padL-8,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},Math.round(v/1000)+'k'));});
-  const pts=caixaCX.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+  const pts=D.caixa.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
   s.appendChild(el('polyline',{points:`${x(0)},${y(min)} ${pts} ${x(NL)},${y(min)}`,fill:'#0a3d6e',opacity:.08}));
   s.appendChild(el('polyline',{points:pts,fill:'none',stroke:'#0a3d6e','stroke-width':3,'stroke-linecap':'round'}));
-  caixaCX.forEach((v,i)=>{s.appendChild(el('circle',{cx:x(i),cy:y(v),r:4.2,fill:'#fff',stroke:'#0a3d6e','stroke-width':2.4}));
+  D.caixa.forEach((v,i)=>{s.appendChild(el('circle',{cx:x(i),cy:y(v),r:4.2,fill:'#fff',stroke:'#0a3d6e','stroke-width':2.4}));
     s.appendChild(el('text',{x:x(i),y:y(v)-10,'text-anchor':'middle','font-size':10.5,'font-weight':800,fill:'#0D2137'},Math.round(v/1000)+'k'));
-    s.appendChild(el('text',{x:x(i),y:h-8,'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#5b7187'},MESES_CX[i]));});
+    s.appendChild(el('text',{x:x(i),y:h-8,'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#5b7187'},MESES[i]));});
   c.appendChild(s);
 })();
 (function(){
@@ -1284,16 +1289,16 @@ const gerCaixaCX=D.gerCaixa.concat([78771.84]);
   const w=560,h=270,padL=64,padR=14,padT=22,padB=30;
   const min=-95000,max=90000;
   const s=svgEl(w,h);
-  const n=gerCaixaCX.length,x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.18,bw=(w-padL-padR)/n*0.60;
+  const n=D.gerCaixa.length,x=i=>padL+i*(w-padL-padR)/n+(w-padL-padR)/n*0.18,bw=(w-padL-padR)/n*0.60;
   const y=v=>padT+(h-padT-padB)*(1-(v-min)/(max-min));
   [-80000,-40000,0,40000,80000].forEach(v=>{s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(v),y2:y(v),stroke:'#eef3f8'}));
     s.appendChild(el('text',{x:padL-8,y:y(v)+4,'text-anchor':'end','font-size':10,fill:'#5b7187'},Math.round(v/1000)+'k'));});
   s.appendChild(el('line',{x1:padL,x2:w-padR,y1:y(0),y2:y(0),stroke:'#94a3b8','stroke-dasharray':'4 4'}));
-  gerCaixaCX.forEach((v,i)=>{
+  D.gerCaixa.forEach((v,i)=>{
     const pos=v>=0;
     s.appendChild(el('rect',{x:x(i),y:pos?y(v):y(0),width:bw,height:Math.abs(y(0)-y(v)),fill:pos?'#10b981':'#ef4444',rx:5}));
     s.appendChild(el('text',{x:x(i)+bw/2,y:pos?y(v)-7:y(v)+16,'text-anchor':'middle','font-size':10.5,'font-weight':800,fill:pos?'#047857':'#b91c1c'},(v/1000).toLocaleString('pt-BR',{maximumFractionDigits:1})+'k'));
-    s.appendChild(el('text',{x:x(i)+bw/2,y:h-8,'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#5b7187'},MESES_CX[i]));});
+    s.appendChild(el('text',{x:x(i)+bw/2,y:h-8,'text-anchor':'middle','font-size':11,'font-weight':700,fill:'#5b7187'},MESES[i]));});
   c.appendChild(s);
 })();
 
