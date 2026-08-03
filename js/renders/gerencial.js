@@ -43,7 +43,7 @@ function renderGerencial() {
     <!-- Despesas por categoria -->
     <div class="two-col" style="margin-top:4px">
       <div class="card">
-        <div class="card-title">📊 Despesas por Categoria <span class="sc-card-sub">empilhadas · Jan–Mai/26</span></div>
+        <div class="card-title">📊 Despesas por Categoria <span class="sc-card-sub">empilhadas · Jan–Jun/26</span></div>
         <div class="sc-chart-wrap" id="scDespChart"></div>
       </div>
       <div class="card">
@@ -56,7 +56,7 @@ function renderGerencial() {
     <div class="section-bar" style="margin-top:8px">
       <div>
         <div class="section-title" style="font-size:16px">🔮 Forecast 2026</div>
-        <div class="section-sub">realizado Jan–Mai + projeção Jun–Dez</div>
+        <div class="section-sub">realizado Jan–Jun + projeção Jul–Dez</div>
       </div>
     </div>
     <div class="sc-kpi-grid" id="scFcKpis"></div>
